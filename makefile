@@ -1,4 +1,4 @@
-TARGET := example
+TARGET := data.c
 
 EXTENSION := c
 CC := g++
