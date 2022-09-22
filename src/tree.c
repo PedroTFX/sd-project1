@@ -28,7 +28,7 @@ void tree_destroy(struct tree_t *tree){
  * Retorna 0 (ok) ou -1 em caso de erro.
  */
 int tree_put(struct tree_t *tree, char *key, struct data_t *value){
-
+	
 }
 
 /* Função para obter da árvore o valor associado à chave key.
