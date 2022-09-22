@@ -46,7 +46,7 @@ clean:
 
 
 #setup directory
-setup: 
+setup:
 	mkdir -p $(OBJDIR)
 	mkdir -p $(BINDIR)
 	mkdir -p $(LIBDIR)
@@ -66,3 +66,5 @@ info:
 	@echo DEBUGFLAGS = $(DEBUGFLAGS)
 	@echo RELEASEFLAGS = $(RELEASEFLAGS)
 	@echo CC = $(CC)
+
+

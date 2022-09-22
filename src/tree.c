@@ -2,6 +2,7 @@
 #define _TREE_H /* Módulo tree */
 
 #include "data.h"
+#include "tree-private.h"
 
 struct tree_t; /* A definir pelo grupo em tree-private.h */
 
@@ -9,7 +10,8 @@ struct tree_t; /* A definir pelo grupo em tree-private.h */
  * Em caso de erro retorna NULL.
  */
 struct tree_t *tree_create(){
-
+	struct tree_t *root = (struct tree_t *)malloc(sizeof(struct tree_t));
+	return root;
 }
 
 /* Função para libertar toda a memória ocupada por uma árvore.
@@ -27,7 +29,7 @@ void tree_destroy(struct tree_t *tree){
  * Retorna 0 (ok) ou -1 em caso de erro.
  */
 int tree_put(struct tree_t *tree, char *key, struct data_t *value){
-
+	
 }
 
 /* Função para obter da árvore o valor associado à chave key.
