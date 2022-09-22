@@ -25,6 +25,7 @@ struct entry_t *entry_create(char *key, struct data_t *data){
 /* Função que elimina uma entry, libertando a memória por ela ocupada 
  */ 
 void entry_destroy(struct entry_t *entry){
+    data_destroy(entry->value);
     free(entry);
 } 
  
