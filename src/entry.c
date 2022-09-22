@@ -10,7 +10,7 @@
  
  */ 
 struct entry_t *entry_create(char *key, struct data_t *data){
-    struct entry_t *entry = (struct entry*)malloc(sizeof (struct entry_t));
+    struct entry_t *entry = (struct entry_t*)malloc(sizeof (struct entry_t));
 
     if(entry == NULL){
         return NULL;
@@ -52,4 +52,19 @@ contrário.
 */ 
 int entry_compare(struct entry_t *entry1, struct entry_t *entry2){
     return (entry1->key == entry2->key) ? 0 : (entry1->key < entry2->key) ? -1 : 1;
+}
+
+int i = 0;
+
+void print(struct entry_t *entry){
+    printf("%c",entry->key);
+}
+
+int main(int argc, char const *argv[])
+{
+    struct data_t *data = data_create(4);
+    struct entry_t *entry = entry_create('k', data);
+
+    
+    return 0;
 }
