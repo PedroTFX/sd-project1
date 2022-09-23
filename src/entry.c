@@ -51,7 +51,7 @@ void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_valu
 contrário. 
 */ 
 int entry_compare(struct entry_t *entry1, struct entry_t *entry2){
-    return (entry1->key == entry2->key) ? 0 : (entry1->key < entry2->key) ? -1 : 1;
+    return strcmp(entry1->key, entry2->key);
 }
 
 int i = 0;
@@ -65,16 +65,17 @@ void print(struct entry_t *entry){
 int main(int argc, char const *argv[])
 {
     struct data_t *data = data_create(4);
-    struct entry_t *entry = entry_create("2", data);
+    struct entry_t *entry = entry_create("a", data);
     print(entry);
 
     //struct data_t *data2 = data_create(4);
     struct entry_t *entry2 = entry_dup(entry); // works
     print(entry2);
-
-    printf("compare data: %d\n",entry_compare(entry, entry2));//doesnt work
     
-    entry_replace(entry, "3", entry2->value); //works
+    entry_replace(entry2, "b", entry->value); //works
+
+    printf("compare data: %d\n",entry_compare(entry, entry2));// work
+    
     print(entry);
 
     entry_destroy(entry); //works
