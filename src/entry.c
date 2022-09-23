@@ -25,7 +25,7 @@ struct entry_t *entry_create(char *key, struct data_t *data){
 /* Função que elimina uma entry, libertando a memória por ela ocupada 
  */ 
 void entry_destroy(struct entry_t *entry){
-    data_destroy(entry->value);
+    //data_destroy(entry->value);   //double free
     free(entry);
 } 
  
@@ -57,14 +57,28 @@ int entry_compare(struct entry_t *entry1, struct entry_t *entry2){
 int i = 0;
 
 void print(struct entry_t *entry){
-    printf("%c",entry->key);
+    printf("entry key: %s\n",entry->key);
+    printf("value data (pointer): %p\n",entry->value->data);
+    printf("value datasize: %d\n",entry->value->datasize);
 }
 
 int main(int argc, char const *argv[])
 {
     struct data_t *data = data_create(4);
-    struct entry_t *entry = entry_create('k', data);
+    struct entry_t *entry = entry_create("2", data);
+    print(entry);
 
+    //struct data_t *data2 = data_create(4);
+    struct entry_t *entry2 = entry_dup(entry); // works
+    print(entry2);
+
+    printf("compare data: %d\n",entry_compare(entry, entry2));//doesnt work
+    
+    entry_replace(entry, "3", entry2->value); //works
+    print(entry);
+
+    entry_destroy(entry); //works
+    print(entry);
     
     return 0;
 }

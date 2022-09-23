@@ -72,7 +72,7 @@ void data_replace(struct data_t *data, int new_size, void *new_data){
 
 	memcpy(data, new_data, new_size);
 }
-
+/*
 int main(int argc, char const *argv[])
 {
 	//test data_create
@@ -102,4 +102,4 @@ int main(int argc, char const *argv[])
 	
 	return 0;
 }
-
+*/
