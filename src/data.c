@@ -7,27 +7,24 @@
  * necessária para armazenar os dados, especificada pelo parâmetro size
  */
 struct data_t *data_create(int size) {
-
+	//invalid size
 	if (size <= 0) {
 		return NULL;
 	}
 
 	struct data_t *data = (struct data_t *)malloc(sizeof(struct data_t));
-
-	// error on init
-	if (data == NULL) {
+	if (data == NULL) { //error on init
 		return NULL;
 	}
 
 	data->datasize = size;
 	data->data = malloc(size);
 
-	// error on memory reserve
+	//error on memory reserve
 	if (data->data == NULL) {
 		free(data);
 		return NULL;
 	}
-
 	return data;
 }
 
@@ -36,20 +33,18 @@ struct data_t *data_create(int size) {
  * memória para os dados.
  */
 struct data_t *data_create2(int size, void *data) {
+	//invalid size ir data
 	if ((size <= 0) || data == NULL) {
 		return NULL;
 	}
 
 	struct data_t *data_st = (struct data_t *)malloc(sizeof(struct data_t));
-
-	// error on init
-	if (data_st == NULL) {
+	if (data_st == NULL) {	//error on init
 		return NULL;
 	}
 
 	data_st->datasize = size;
-	data_st->data = data;
-
+	memcpy(data_st->data, data, size);
 	return data_st;
 }
 
@@ -57,13 +52,10 @@ struct data_t *data_create2(int size, void *data) {
  * libertando toda a memória por ele ocupada.
  */
 void data_destroy(struct data_t *data) {
-	if (data == NULL) {
+	if (data == NULL || data->data == NULL) {
 		return;
 	}
-	if (data->data != NULL) {
-		free(data->data);
-	}
-
+	free(data->data);
 	free(data);
 }
 
@@ -76,23 +68,19 @@ struct data_t *data_dup(struct data_t *data) {
 	}
 
 	struct data_t *data_st = (struct data_t *)malloc(sizeof(struct data_t));
-
-	// error on init
-	if (data_st == NULL) {
+	if (data_st == NULL) { // error on init
 		return NULL;
 	}
 
 	data_st->datasize = data->datasize;
-	data_st->data = malloc(data_st->datasize);
+	data_st->data = malloc(data->datasize);
 
 	// error on init
 	if (data_st->data == NULL) {
 		free(data_st);
 		return NULL;
 	}
-
 	memcpy(data_st->data, data->data, data->datasize);
-
 	return data_st;
 }
 
