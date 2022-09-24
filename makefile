@@ -68,7 +68,7 @@ info:
 	@echo CC = $(CC)
 
 test_data:
-	$(CC) $(FLAGS) -o obj/data.o -c src/data.c -I include && gcc -g -Wall tests/test_data.c -o bin/test_data obj/data.o -Iinclude
+	gcc -g -Wall -o obj/data.o -c src/data.c -I include && gcc -g -Wall tests/test_data.c -o bin/test_data obj/data.o -Iinclude
 
 test_data_run:
 	$(test_data)
@@ -76,7 +76,7 @@ test_data_run:
 
 test_entry:
 	$(test_data)
-	$(CC) $(FLAGS) -o obj/entry.o -c src/entry.c -I include && gcc -g -Wall tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -Iinclude
+	gcc -g -Wall -o obj/entry.o -c src/entry.c -I include && gcc -g -Wall tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -Iinclude
 
 test_entry_run:
 	$(test_entry)
