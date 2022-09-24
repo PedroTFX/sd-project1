@@ -16,6 +16,17 @@ struct tree_t *tree_create(){
  */
 void tree_destroy(struct tree_t *tree){
 
+	entry_destroy(&(tree->entry));
+
+	if (tree->left !=  NULL) {
+		tree_destroy(tree->left);
+	}
+
+	if (tree->right != NULL) {
+		tree_destroy(tree->right);
+	}
+
+	free(tree);
 }
 
 /* Função para adicionar um par chave-valor à árvore.
