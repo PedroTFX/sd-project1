@@ -34,11 +34,8 @@ void print(struct entry_t *entry) {
 void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_value){
 
     free(entry);
-<<<<<<< HEAD
     //printf(entry);
-=======
     print(entry);
->>>>>>> 344d9b735a1b9483bf5dd6aa46c8e80ee4042cd5
     entry->key = new_key;
     entry->value = new_value;
 }
