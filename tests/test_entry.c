@@ -32,13 +32,13 @@ int testDup() {
 	struct entry_t *entry2 = entry_dup(entry);
 
 	result = entry2 != entry;
-	
+
 	result = result && (entry->key != entry2->key) &&
 		              (strcmp(entry->key,entry2->key) == 0) && 
                         (entry->value != entry2->value) &&
 		              (entry->value->datasize == entry2->value->datasize) &&
                         (memcmp(entry->value->data, entry2->value->data, entry->value->datasize) == 0);
-
+	
 	entry_destroy(entry);
 	entry_destroy(entry2);
 
@@ -90,12 +90,12 @@ int testCompare(){
 	struct data_t *value2 = data_create2(strlen("1234567890abc")+1, strdup("1234567890abc"));
 	struct data_t *value3 = data_create2(strlen("sabc")+1, strdup("sabc"));
 	struct data_t *value4 = data_create2(strlen("abc")+1, strdup("abc"));
-
+	printf("data created\n");
 	struct entry_t *entry1 = entry_create(key1, value1);
 	struct entry_t *entry2 = entry_create(key2, value2);
 	struct entry_t *entry3 = entry_create(key3, value3);
 	struct entry_t *entry4 = entry_create(key4, value4);
-
+	printf("entry created\n");
 	result = (entry_compare(entry1, entry2) == -1);
 	result = result && (entry_compare(entry4, entry2) == -1);
 	result = result && (entry_compare(entry2, entry1) == 1);
@@ -104,12 +104,12 @@ int testCompare(){
 	result = result && (entry_compare(entry2, entry3) == -1);
 	result = result && (entry_compare(entry1, entry4) == 0);
 	result = result && (entry_compare(entry4, entry1) == 0);
-
+	printf("results created\n");
 	entry_destroy(entry1);
 	entry_destroy(entry2);
 	entry_destroy(entry3);
 	entry_destroy(entry4);
-
+	printf("destroied created\n");
 	printf("entry - testCompare: %s\n",result?"passou":"não passou");
 	return result;
 }
