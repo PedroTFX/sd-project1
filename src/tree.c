@@ -9,8 +9,7 @@ struct tree_t; /* A definir pelo grupo em tree-private.h */
  * Em caso de erro retorna NULL.
  */
 struct tree_t *tree_create(){
-	struct tree_t *root = (struct tree_t *)malloc(sizeof(struct tree_t));
-	return root;
+	return (struct tree_t *)malloc(sizeof(struct tree_t));
 }
 
 /* Função para libertar toda a memória ocupada por uma árvore.
