@@ -2,6 +2,7 @@
 #include <entry.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 /* Função que cria uma entry, reservando a memória necessária para a 
  * estrutura e inicializando os campos key e value, respetivamente, com a 
@@ -21,12 +22,19 @@ struct entry_t *entry_create(char *key, struct data_t *data){
 
     return entry;
 } 
+
+void print(struct entry_t *entry){
+    printf("entry key: %s\n",entry->key);
+    printf("value data (pointer): %p\n",entry->value->data);
+    printf("value datasize: %d\n",entry->value->datasize);
+}
  
 /* Função que elimina uma entry, libertando a memória por ela ocupada 
  */ 
 void entry_destroy(struct entry_t *entry){
-    //data_destroy(entry->value);   //double free
-    free(entry);
+    data_destroy(entry->value);   //double free
+    //free(entry);
+    //free(entry->key);
 } 
  
 /* Função que duplica uma entry, reservando a memória necessária para a 
@@ -40,7 +48,9 @@ struct entry_t *entry_dup(struct entry_t *entry){
 *  Deve assegurar que destroi o conteúdo antigo da mesma. 
 */ 
 void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_value){
-    data_destroy(entry->value);
+    
+    free(entry);
+    printf(entry);
     entry->key = new_key;
     entry->value = new_value;
 } 
@@ -56,11 +66,7 @@ int entry_compare(struct entry_t *entry1, struct entry_t *entry2){
 
 int i = 0;
 
-void print(struct entry_t *entry){
-    printf("entry key: %s\n",entry->key);
-    printf("value data (pointer): %p\n",entry->value->data);
-    printf("value datasize: %d\n",entry->value->datasize);
-}
+
 
 int main(int argc, char const *argv[])
 {

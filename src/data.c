@@ -32,10 +32,9 @@ struct data_t *data_create(int size){
  * memória para os dados.
  */
 struct data_t *data_create2(int size, void *data){
-	struct data_t *data_st = data_create(size);
-
-	//copy mem to data
-	memcpy(data_st->data, data, size);
+	struct data_t *data_st = (struct data_t*)malloc(sizeof(struct data_t));
+	data_st->data = data;
+	data_st->datasize = size;
 	return data_st;
 }
 
@@ -63,14 +62,12 @@ void data_replace(struct data_t *data, int new_size, void *new_data){
 
 	//put new data
 	data->datasize = new_size;
-	data->data = malloc(new_size);
+	data->data = new_data;
 
 	if(data->data == NULL){
 		free(data);
 		return; // a func é um void?? n se rpepara erros?
 	}
-
-	memcpy(data, new_data, new_size);
 }
 /*
 int main(int argc, char const *argv[])
