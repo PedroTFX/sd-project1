@@ -44,7 +44,7 @@ struct data_t *data_create2(int size, void *data) {
 	}
 
 	data_st->datasize = size;
-	memcpy(data_st->data, data, size);
+	data_st->data = data;
 	return data_st;
 }
 
