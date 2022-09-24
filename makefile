@@ -68,7 +68,7 @@ info:
 	@echo CC = $(CC)
 
 test_data:
-	gcc -g -Wall -o obj/data.o -c src/data.c -I include && gcc -g -Wall tests/test_data.c -o bin/test_data obj/data.o -Iinclude
+	$(CC) $(DEBUGFLAGS) -o obj/data.o -c src/data.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_data.c -o bin/test_data obj/data.o -I $(INCLUDEDIR)
 
 test_data_run:
 	$(test_data)
