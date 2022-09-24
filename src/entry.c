@@ -22,13 +22,23 @@ struct entry_t *entry_create(char *key, struct data_t *data) {
     return entry;
 }
 
+void print(struct entry_t *entry) {
+	printf("entry key: %s\n", entry->key);
+	printf("value data (pointer): %p\n", entry->value->data);
+	printf("value datasize: %d\n", entry->value->datasize);
+}
+
 /* Função que substitui o conteúdo de uma entrada entry_t.
 *  Deve assegurar que destroi o conteúdo antigo da mesma.
 */
 void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_value){
 
     free(entry);
+<<<<<<< HEAD
     //printf(entry);
+=======
+    print(entry);
+>>>>>>> 344d9b735a1b9483bf5dd6aa46c8e80ee4042cd5
     entry->key = new_key;
     entry->value = new_value;
 }
@@ -88,17 +98,7 @@ contrário.
 */
 int entry_compare(struct entry_t *entry1, struct entry_t *entry2) {
 	int result = strcmp(entry1->key, entry2->key);
-	if (result > 0) {
-		return 1;
-	} else if (result < 0) {
-		return -1;
-	} else {
-		return 0;
-	}
+	return (result == 0) ? 0 : (result > 0) ? 1 : -1;
 }
 
-void print(struct entry_t *entry) {
-	printf("entry key: %s\n", entry->key);
-	printf("value data (pointer): %p\n", entry->value->data);
-	printf("value datasize: %d\n", entry->value->datasize);
-}
+
