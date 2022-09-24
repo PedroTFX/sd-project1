@@ -26,7 +26,9 @@ struct entry_t *entry_create(char *key, struct data_t *data) {
 *  Deve assegurar que destroi o conteúdo antigo da mesma.
 */
 void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_value){
-    data_destroy(entry->value);
+    
+    free(entry);
+    printf(entry);
     entry->key = new_key;
     entry->value = new_value;
 }
@@ -34,7 +36,8 @@ void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_valu
 /* Função que elimina uma entry, libertando a memória por ela ocupada
  */
 void entry_destroy(struct entry_t *entry) {
-	// data_destroy(entry->value);   //double free
+	free(entry->key);
+	data_destroy(entry->value); // double free
 	free(entry);
 }
 
