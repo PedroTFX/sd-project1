@@ -123,13 +123,12 @@ int main(int argc, char const *argv[])
  * a função. Devolve NULL em caso de erro.
  */
 struct data_t *tree_get(struct tree_t *tree, char *key){
-	struct entry_t *entry = (struct entry_t *)malloc(sizeof(struct entry_t));
+	struct entry_t *entry = malloc(sizeof(struct entry_t));
 	if (entry == NULL) {
 		return NULL;
 	}
 	
-	entry->key = malloc(strlen(key) + 1);
-	strcpy(entry->key, key);
+	entry->key =strdup(key);
 
 	if(entry_compare(entry, tree->node) == -1){
 		return tree_get(tree->tree_left, key);
