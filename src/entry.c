@@ -10,7 +10,7 @@
  * memória para estes campos.
  */
 struct entry_t *entry_create(char *key, struct data_t *data) {
-	struct entry_t *entry = (struct entry_t *)malloc(sizeof(struct entry_t));
+	struct entry_t *entry = malloc(sizeof(struct entry_t));
 
 	if (entry == NULL) {
 		return NULL;
@@ -25,7 +25,7 @@ struct entry_t *entry_create(char *key, struct data_t *data) {
 *  Deve assegurar que destroi o conteúdo antigo da mesma.
 */
 void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_value){
-    free(entry);
+    data_destroy(entry->value);
     entry->key = new_key;
     entry->value = new_value;
 }
@@ -45,7 +45,7 @@ void entry_destroy(struct entry_t *entry) {
  * nova estrutura.
  */
 struct entry_t *entry_dup(struct entry_t *entry) {
-	struct entry_t *entry2 = (struct entry_t *)malloc(sizeof(struct entry_t));
+	struct entry_t *entry2 = malloc(sizeof(struct entry_t));
 
 	if (entry2 == NULL || entry == NULL) {
 		return NULL;

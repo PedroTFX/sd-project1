@@ -1,7 +1,7 @@
 TARGET := example
 
 EXTENSION := cpp
-CC := g++
+CC := gcc
 
 INCLUDEDIR := include
 OBJDIR := obj

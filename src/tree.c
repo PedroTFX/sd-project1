@@ -11,7 +11,7 @@ struct tree_t; /* A definir pelo grupo em tree-private.h */
  * Em caso de erro retorna NULL.
  */
 struct tree_t *tree_create(){
-	struct tree_t *tree = (struct tree_t *)malloc(sizeof(struct tree_t));
+	struct tree_t *tree = malloc(sizeof(struct tree_t));
 	if(tree == NULL){
 		return NULL;
 	}
@@ -48,13 +48,13 @@ void tree_destroy(struct tree_t *tree){
  */
 int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 
-	struct entry_t *entry = (struct entry_t *)malloc(sizeof(struct entry_t));
+	struct entry_t *entry = malloc(sizeof(struct entry_t));
 
 	if (entry == NULL) {
 		return -1;
 	}
 
-	entry->key = (char *)malloc(strlen(key) + 1);
+	entry->key = malloc(strlen(key) + 1);
 	strcpy(entry->key, key);
 
 	entry->value = data_create(value->datasize);
@@ -96,7 +96,7 @@ struct data_t *tree_get(struct tree_t *tree, char *key){
 		return NULL;
 	}
 	
-	entry->key = (char *)malloc(strlen(key) + 1);
+	entry->key = malloc(strlen(key) + 1);
 	strcpy(entry->key, key);
 
 	if(entry_compare(entry, tree->node) == -1){

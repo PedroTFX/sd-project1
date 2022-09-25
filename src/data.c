@@ -12,7 +12,7 @@ struct data_t *data_create(int size) {
 		return NULL;
 	}
 
-	struct data_t *data = (struct data_t *)malloc(sizeof(struct data_t));
+	struct data_t *data = malloc(sizeof(struct data_t));
 	if (data == NULL) { //error on init
 		free(data);
 		return NULL;
@@ -38,7 +38,7 @@ struct data_t *data_create2(int size, void *data) {
 	if ((size <= 0) || data == NULL) {
 		return NULL;
 	}
-	struct data_t *data_st = (struct data_t *)malloc(sizeof(struct data_t));
+	struct data_t *data_st = malloc(sizeof(struct data_t));
 	if (data_st == NULL) {	//error on init
 		free(data_st);
 		return NULL;
@@ -53,11 +53,12 @@ struct data_t *data_create2(int size, void *data) {
  * libertando toda a memória por ele ocupada.
  */
 void data_destroy(struct data_t *data) {
-	if (data == NULL || data->data == NULL) {
-		return;
+	if(data){
+		if(data->data) {
+			free(data->data);
+		}
+		free(data);
 	}
-	free(data->data);
-	free(data);
 }
 
 /* Função que duplica uma estrutura data_t, reservando toda a memória
@@ -68,7 +69,7 @@ struct data_t *data_dup(struct data_t *data) {
 		return NULL;
 	}
 
-	struct data_t *data_st = (struct data_t *)malloc(sizeof(struct data_t));
+	struct data_t *data_st = malloc(sizeof(struct data_t));
 	if (data_st == NULL) { // error on init
 		return NULL;
 	}
