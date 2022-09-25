@@ -18,7 +18,6 @@ struct entry_t *entry_create(char *key, struct data_t *data) {
 
 	entry->key = key;
     entry->value = data;
-
     return entry;
 }
 
@@ -34,8 +33,6 @@ void print(struct entry_t *entry) {
 void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_value){
 
     free(entry);
-    //printf(entry);
-    print(entry);
     entry->key = new_key;
     entry->value = new_value;
 }
@@ -43,11 +40,12 @@ void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_valu
 /* Função que elimina uma entry, libertando a memória por ela ocupada
  */
 void entry_destroy(struct entry_t *entry) {
-	if(entry != NULL){
-	free(entry->key);
-	data_destroy(entry->value); // double free
+	if(entry == NULL){
+		return;
 	}
-	free(entry);
+	
+	data_destroy(entry->value);
+	free(entry->key);
 }
 
 /* Função que duplica uma entry, reservando a memória necessária para a
