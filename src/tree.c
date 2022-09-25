@@ -5,13 +5,11 @@
 #include <string.h>
 #include <stdio.h>
 
-struct tree_t; /* A definir pelo grupo em tree-private.h */
-
 /* Função para criar uma nova árvore tree vazia.
  * Em caso de erro retorna NULL.
  */
 struct tree_t *tree_create(){
-	struct tree_t *tree = malloc(sizeof(struct tree_t));
+	struct tree_t* tree = malloc(sizeof(struct tree_t));
 	if(tree == NULL){
 		return NULL;
 	}
@@ -30,12 +28,11 @@ void tree_destroy(struct tree_t *tree){
 	}
 	if(tree->tree_left != NULL){
 		tree_destroy(tree->tree_left);
-		free(tree->tree_left);
 	}
 	if(tree->tree_right != NULL){
 		tree_destroy(tree->tree_right);
-		free(tree->tree_right);
 	}
+	free(tree);
 }
 
 /* Função para adicionar um par chave-valor à árvore.
@@ -48,39 +45,74 @@ void tree_destroy(struct tree_t *tree){
  */
 int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 
-	struct entry_t *entry = malloc(sizeof(struct entry_t));
-
+	struct entry_t *entry = malloc(sizeof (struct entry_t));
 	if (entry == NULL) {
 		return -1;
 	}
 
-	entry->key = malloc(strlen(key) + 1);
-	strcpy(entry->key, key);
+	entry->key = strdup(key);
+	entry->value = data_dup(value);
 
-	entry->value = data_create(value->datasize);
-	memcpy(entry->value->data, value->data, entry->value->datasize);
+	struct tree_t* current = tree;
 
-	//found empty node
-	if(tree->node == NULL){
-		tree->node = entry_dup(entry);
-		return 0;
+	while(current != NULL){
+		int comp = entry_compare(entry, tree->node);
+
+		if(current->node == NULL){ // found empt node
+			current->node = entry;
+			return 0;
+		}
+
+		if(comp == -1){
+			if(current->tree_left == NULL){
+				current->tree_left = tree_create();
+			}
+			current = current->tree_left;
+		}else if(comp == 1){
+			if(current->tree_right == NULL){
+				current->tree_right = tree_create();
+			}
+			current = current->tree_right;
+		}else{
+			entry_destroy(current->node);
+			current->node = entry;
+			return 0;
+		}
 	}
-	//		     node   		               	   tree->node
-	//		    /   |		           tree->tree_left 	  tree->tree_right
-	//   node_left  node_right    tree->tree_left->node	  tree->tree_right->node
-	//
-	//printf(" %d", entry_compare(entry, tree->node));
-	if(entry_compare(entry, tree->node) == -1){
-		tree->tree_left = tree_create();
-		tree_put(tree->tree_left, key, value);
-	}else if(entry_compare(entry, tree->node) == 1){
-		tree->tree_right = tree_create();
-		tree_put(tree->tree_right, key, value);
-	}else{
-		entry_replace(tree->node, key, value);
-	}
-	return -1;
+	current->node = entry;
+	return 0;
 }
+
+int main(int argc, char const *argv[])
+{
+	struct tree_t* tree = tree_create();
+
+	char* key1 = malloc(sizeof(char));
+	char* key2 = malloc(sizeof(char));
+	char* key3 = malloc(sizeof(char));
+	char* key4 = malloc(sizeof(char));
+	char* key5 = malloc(sizeof(char));
+	sprintf(key1,"a1");
+	sprintf(key2,"a2");
+	sprintf(key3,"a3");
+	sprintf(key4,"a4");
+	sprintf(key5,"a5");
+	struct data_t* data1 = data_create2(strlen(key1)+1,strdup(key1));
+	struct data_t* data2 = data_create2(strlen(key2)+1,strdup(key2));
+	struct data_t* data3 = data_create2(strlen(key3)+1,strdup(key3));
+	struct data_t* data4 = data_create2(strlen(key4)+1,strdup(key4));
+	struct data_t* data5 = data_create2(strlen(key5)+1,strdup(key5));
+	tree_put(tree, key1, data1);
+	tree_put(tree, key2, data2);
+	tree_put(tree, key3, data1);
+	tree_put(tree, key4, data2);
+	tree_put(tree, key5, data1);
+
+	//print tree
+	
+	return 0;
+}
+
 
 /* Função para obter da árvore o valor associado à chave key.
  * A função deve devolver uma cópia dos dados que terão de ser

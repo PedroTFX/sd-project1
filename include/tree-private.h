@@ -5,9 +5,9 @@
 #include "entry.h"
 
 struct tree_t {
-	struct entry_t *node;
-	struct tree_t *tree_left;
-	struct tree_t *tree_right;
+	struct entry_t* node;
+	struct tree_t* tree_left;
+	struct tree_t* tree_right;
 };
 
 #endif

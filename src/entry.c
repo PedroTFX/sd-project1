@@ -40,24 +40,25 @@ void entry_destroy(struct entry_t *entry) {
 	
 	data_destroy(entry->value);
 	free(entry->key);
+	free(entry);
 }
 
 /* Função que duplica uma entry, reservando a memória necessária para a
  * nova estrutura.
  */
 struct entry_t *entry_dup(struct entry_t *entry) {
-	struct entry_t *entry2 = malloc(sizeof(struct entry_t));
-
-	if (entry2 == NULL || entry == NULL) {
+	if(entry == NULL){
 		return NULL;
 	}
 
-	entry2->key = (char *)malloc(strlen(entry->key) + 1);
-	strcpy(entry2->key, entry->key);
+	struct entry_t *entry2 = malloc(sizeof(struct entry_t));
 
-	entry2->value = data_create(entry->value->datasize);
-	memcpy(entry2->value->data, entry->value->data, entry->value->datasize);
+	if (entry2 == NULL) {
+		return NULL;
+	}
 
+	entry2->key = strdup(entry->key);
+	entry2->value = data_dup(entry->value);
 	return entry2;
 }
 
