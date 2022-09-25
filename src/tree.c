@@ -1,7 +1,8 @@
 /* Módulo tree */
 #include <stdlib.h>
-#include "data.h"
-#include "tree-private.h"
+#include <data.h>
+#include <tree.h>
+#include <tree-private.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -20,18 +21,18 @@ struct tree_t *tree_create(){
 /* Função para libertar toda a memória ocupada por uma árvore.
  */
 void tree_destroy(struct tree_t *tree){
+
 	if(tree == NULL){
 		return;
 	}
+
 	if(tree->node != NULL){
 		entry_destroy(tree->node);
 	}
-	if(tree->tree_left != NULL){
-		tree_destroy(tree->tree_left);
-	}
-	if(tree->tree_right != NULL){
-		tree_destroy(tree->tree_right);
-	}
+	
+	tree_destroy(tree->tree_left);
+	tree_destroy(tree->tree_right);
+
 	free(tree);
 }
 
@@ -56,25 +57,26 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 	struct tree_t* current = tree;
 
 	while(current != NULL){
-		int comp = entry_compare(entry, tree->node);
-
+		
 		if(current->node == NULL){ // found empt node
 			current->node = entry;
 			return 0;
 		}
 
+		int comp = entry_compare(entry, current->node);
+
 		if(comp == -1){
-			if(current->tree_left == NULL){
+			if(current->tree_left == NULL){		//empty branch
 				current->tree_left = tree_create();
 			}
 			current = current->tree_left;
 		}else if(comp == 1){
-			if(current->tree_right == NULL){
+			if(current->tree_right == NULL){	//empty branch
 				current->tree_right = tree_create();
 			}
 			current = current->tree_right;
-		}else{
-			entry_destroy(current->node);
+		}else{									//replace
+			entry_destroy(current->node);	
 			current->node = entry;
 			return 0;
 		}
@@ -82,37 +84,6 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 	current->node = entry;
 	return 0;
 }
-
-int main(int argc, char const *argv[])
-{
-	struct tree_t* tree = tree_create();
-
-	char* key1 = malloc(sizeof(char));
-	char* key2 = malloc(sizeof(char));
-	char* key3 = malloc(sizeof(char));
-	char* key4 = malloc(sizeof(char));
-	char* key5 = malloc(sizeof(char));
-	sprintf(key1,"a1");
-	sprintf(key2,"a2");
-	sprintf(key3,"a3");
-	sprintf(key4,"a4");
-	sprintf(key5,"a5");
-	struct data_t* data1 = data_create2(strlen(key1)+1,strdup(key1));
-	struct data_t* data2 = data_create2(strlen(key2)+1,strdup(key2));
-	struct data_t* data3 = data_create2(strlen(key3)+1,strdup(key3));
-	struct data_t* data4 = data_create2(strlen(key4)+1,strdup(key4));
-	struct data_t* data5 = data_create2(strlen(key5)+1,strdup(key5));
-	tree_put(tree, key1, data1);
-	tree_put(tree, key2, data2);
-	tree_put(tree, key3, data1);
-	tree_put(tree, key4, data2);
-	tree_put(tree, key5, data1);
-
-	//print tree
-	
-	return 0;
-}
-
 
 /* Função para obter da árvore o valor associado à chave key.
  * A função deve devolver uma cópia dos dados que terão de ser
@@ -145,31 +116,38 @@ struct data_t *tree_get(struct tree_t *tree, char *key){
  * Retorna 0 (ok) ou -1 (key not found).
  */
 int tree_del(struct tree_t *tree, char *key){
-	struct data_t *data_to_destroy = tree_get(tree, key);
-	if (1 == 1/*data_to_destroy != NULL*/) {
-		data_destroy(data_to_destroy);
-		return 0;
-	} else{
-		return -1;
-	}
+	return 0;
 }
 
 /* Função que devolve o número de elementos contidos na árvore.
  */
 int tree_size(struct tree_t *tree){
-	return tree_size(tree->tree_left) + tree_size(tree->tree_right) + (tree->node != NULL) ? 1 : 0;
+	if(tree == NULL){
+		return 0;
+	}
+	return tree_size(tree->tree_left) + tree_size(tree->tree_right) + (tree->node != NULL);
 }
 
 /* Função que devolve a altura da árvore.
  */
 int tree_height(struct tree_t *tree){
+	if(tree == NULL){
+		return 1;
+	}
+
 	int left = tree_height(tree->tree_left);
 	int right = tree_height(tree->tree_right);
-	if(tree->node != NULL){
+
+	if(tree->tree_left != NULL){
 		left++;
+	}
+
+	if(tree->tree_right != NULL){
 		right++;
 	}
-	return (left < right) ? left : right;
+
+
+	return (left > right) ? left : right;
 }
 
 /* Função que devolve um array de char* com a cópia de todas as keys da

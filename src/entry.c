@@ -38,7 +38,7 @@ void entry_destroy(struct entry_t *entry) {
 		return;
 	}
 	
-	data_destroy(entry->value);
+	//data_destroy(entry->value);
 	free(entry->key);
 	free(entry);
 }
