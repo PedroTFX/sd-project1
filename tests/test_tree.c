@@ -297,13 +297,13 @@ int main() {
 
 	printf("iniciando teste tree bin\n");
 
-	mainmain();
+	//mainmain();
 
-	//score += testTreeVazia();
+	score += testTreeVazia();
 
-	//score += testPutInexistente();
+	score += testPutInexistente();
 
-	//score += testPutExistente();
+	score += testPutExistente();
 
 	//score += testDelInexistente();
 

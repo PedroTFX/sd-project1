@@ -12,6 +12,7 @@
 struct tree_t *tree_create(){
 	struct tree_t* tree = malloc(sizeof(struct tree_t));
 	if(tree == NULL){
+		free(tree);
 		return NULL;
 	}
 	
@@ -48,6 +49,7 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 
 	struct entry_t *entry = malloc(sizeof (struct entry_t));
 	if (entry == NULL) {
+		free(entry);
 		return -1;
 	}
 
@@ -96,16 +98,19 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 struct data_t *tree_get(struct tree_t *tree, char *key){
 	struct entry_t *entry = malloc(sizeof(struct entry_t));
 	if (entry == NULL) {
+		free(entry);
 		return NULL;
 	}
-	
-	entry->key =strdup(key);
+	entry->key = strdup(key);
 
 	if(entry_compare(entry, tree->node) == -1){
+		entry_destroy(entry);
 		return tree_get(tree->tree_left, key);
 	}else if(entry_compare(entry, tree->node) == 1){
+		entry_destroy(entry);
 		return tree_get(tree->tree_right, key);
 	}else{
+		entry_destroy(entry);
 		return tree->node->value;
 	}
 	return NULL;
