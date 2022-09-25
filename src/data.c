@@ -14,6 +14,7 @@ struct data_t *data_create(int size) {
 
 	struct data_t *data = (struct data_t *)malloc(sizeof(struct data_t));
 	if (data == NULL) { //error on init
+		free(data);
 		return NULL;
 	}
 
@@ -33,16 +34,16 @@ struct data_t *data_create(int size) {
  * memória para os dados.
  */
 struct data_t *data_create2(int size, void *data) {
-	//invalid size ir data
+	//invalid size or data
 	if ((size <= 0) || data == NULL) {
 		return NULL;
 	}
-
 	struct data_t *data_st = (struct data_t *)malloc(sizeof(struct data_t));
 	if (data_st == NULL) {	//error on init
+		free(data_st);
 		return NULL;
 	}
-
+	
 	data_st->datasize = size;
 	data_st->data = data;
 	return data_st;

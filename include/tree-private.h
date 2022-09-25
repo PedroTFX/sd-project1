@@ -3,11 +3,11 @@
 
 #include "tree.h"
 #include "entry.h"
-struct tree_t {
-	struct entry_t *left_node;
-	struct entry_t *right_node;
-};
-//pode-se mudar a struct
 
+struct tree_t {
+	struct entry_t *node;
+	struct tree_t *tree_left;
+	struct tree_t *tree_right;
+};
 
 #endif
