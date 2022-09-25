@@ -66,9 +66,7 @@ struct entry_t *entry_dup(struct entry_t *entry) {
 	entry2->key = (char *)malloc(strlen(entry->key) + 1);
 	strcpy(entry2->key, entry->key);
 
-	entry2->value = (struct data_t*)malloc(sizeof (struct data_t));
-	entry2->value->datasize = entry->value->datasize;
-	entry2->value->data = malloc(entry->value->datasize);
+	entry2->value = data_create(entry->value->datasize);
 	memcpy(entry2->value->data, entry->value->data, entry->value->datasize);
 
 	return entry2;
