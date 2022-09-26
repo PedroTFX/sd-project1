@@ -30,15 +30,17 @@ int testPutInexistente() {
 	for(i=0; i<1024; i++) {
 		key[i] = (char*)malloc(16*sizeof(char));
 		sprintf(key[i],"a/key/b-%d",i);
+		
 		data[i] = data_create2(strlen(key[i])+1,strdup(key[i]));
 		tree_put(tree,key[i],data[i]);
-		
 	}
-	
+
+	printf("%d\n",tree_size(tree));
+		
+	printf("2nd for\n");
 	assert(tree_size(tree) == 1024);
 	result = (tree_size(tree) == 1024);
-	printf("2 - for\n");
-	for(i=0; i<1024; i++) {
+		for(i=0; i<1024; i++) {
 
 		d = tree_get(tree,key[i]);
 
@@ -51,13 +53,12 @@ int testPutInexistente() {
                            d->data != data[i]->data);
 		data_destroy(d);
 	}
-
-	printf("3 - for\n");
+	printf("3nd for\n");
 	for(i=0; i<1024; i++) {
 		free(key[i]);
 		data_destroy(data[i]);
 	}
-	printf("tree destroy\n");
+
 	tree_destroy(tree);
 	
 	
@@ -252,10 +253,12 @@ int main() {
 
 	printf("Tree_Vazia\n");
 	score += testTreeVazia();
+
 	printf("Tree_PutInexistente\n");
 	score += testPutInexistente();
+
 	printf("Tree_PutExistente\n");
-	score += testPutExistente();
+	//score += testPutExistente();
 
 	//score += testDelInexistente();
 
