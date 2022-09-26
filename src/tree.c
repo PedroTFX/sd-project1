@@ -10,12 +10,13 @@
  * Em caso de erro retorna NULL.
  */
 struct tree_t *tree_create(){
-	struct tree_t* tree = malloc(sizeof(struct tree_t*));
+	struct tree_t* tree = malloc(sizeof(struct tree_t));
 	if(tree == NULL){
 		free(tree);
 		tree = NULL;
 		return NULL;
 	}
+	memset(tree, 0, sizeof(struct tree_t));
 	return tree;
 }
 
@@ -36,6 +37,7 @@ void tree_destroy(struct tree_t *tree){
 			tree_destroy(tree->tree_right);
 			tree->tree_right = NULL;
 		}
+		
 		free(tree);
 		tree = NULL;
 	}
@@ -52,7 +54,7 @@ void tree_destroy(struct tree_t *tree){
  */
 int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 	struct tree_t* current_tree = tree;
-	struct entry_t* entry = malloc(sizeof(struct entry_t*));
+	struct entry_t* entry = malloc(sizeof(struct entry_t));
 	entry->key = strdup(key);
 	entry->value = data_dup(value);
 
@@ -64,6 +66,7 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 
 	while(current_tree->node){
 		int comp = entry_compare(entry, current_tree->node);
+
 		if(comp <= -1){
 			if(!current_tree->tree_left){
 				current_tree->tree_left = tree_create();
@@ -76,9 +79,7 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 			current_tree = current_tree->tree_right;
 		}else{				//replace
 			entry_destroy(current_tree->node);		//clean bef put
-			current_tree->node = entry_dup(entry);
-			entry_destroy(entry);
-			return 0;
+			break;
 		}
 	}
 	current_tree->node = entry_dup(entry);
@@ -96,7 +97,7 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
  * a função. Devolve NULL em caso de erro.
  */
 struct data_t *tree_get(struct tree_t *tree, char *key){
-	struct entry_t* entry = malloc(sizeof(struct entry_t*));
+	struct entry_t* entry = malloc(sizeof(struct entry_t));
 	entry->key = strdup(key);
 
 	struct tree_t* current_tree = tree;
@@ -124,7 +125,8 @@ struct data_t *tree_get(struct tree_t *tree, char *key){
  * Retorna 0 (ok) ou -1 (key not found).
  */
 int tree_del(struct tree_t *tree, char *key){
-	return 0;
+	
+	
 }
 
 /* Função que devolve o número de elementos contidos na árvore.

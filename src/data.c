@@ -13,7 +13,7 @@ struct data_t *data_create(int size) {
 		return NULL;
 	}
 
-	struct data_t* data = malloc(sizeof(struct data_t*));
+	struct data_t* data = malloc(sizeof(struct data_t));
 	if (data == NULL) { //error on init
 		free(data);
 		data = NULL;
@@ -44,7 +44,7 @@ struct data_t *data_create2(int size, void *data) {
 		return NULL;
 	}
 
-	struct data_t* data_st = malloc(sizeof(struct data_t*));
+	struct data_t* data_st = malloc(sizeof(struct data_t));
 	if (data_st == NULL) {	//error on init
 		free(data_st);
 		data_st = NULL;
@@ -78,7 +78,7 @@ struct data_t *data_dup(struct data_t *data) {
 		return NULL;
 	}
 
-	struct data_t* data_st = malloc(sizeof(struct data_t*));
+	struct data_t* data_st = malloc(sizeof(struct data_t));
 	if (data_st == NULL) { // error on init
 		data_destroy(data_st);
 		return NULL;
