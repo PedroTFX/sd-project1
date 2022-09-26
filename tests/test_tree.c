@@ -27,7 +27,6 @@ int testPutInexistente() {
 	struct tree_t *tree = tree_create();
 	char *key[1024];
 	struct data_t *data[1024], *d;
-	
 	for(i=0; i<1024; i++) {
 		key[i] = (char*)malloc(16*sizeof(char));
 		sprintf(key[i],"a/key/b-%d",i);
@@ -35,10 +34,10 @@ int testPutInexistente() {
 		tree_put(tree,key[i],data[i]);
 		
 	}
-
+	
 	assert(tree_size(tree) == 1024);
 	result = (tree_size(tree) == 1024);
-	
+	printf("2 - for\n");
 	for(i=0; i<1024; i++) {
 
 		d = tree_get(tree,key[i]);
@@ -53,13 +52,12 @@ int testPutInexistente() {
 		data_destroy(d);
 	}
 
-	
+	printf("3 - for\n");
 	for(i=0; i<1024; i++) {
 		free(key[i]);
 		data_destroy(data[i]);
 	}
-	
-	
+	printf("tree destroy\n");
 	tree_destroy(tree);
 	
 	
@@ -74,13 +72,12 @@ int testPutExistente() {
 	struct tree_t *tree = tree_create();
 	char *key[1024];
 	struct data_t *data[1024], *d;
-	printf("here\n");
 	for(i=0; i<1024; i++) {
 		key[i] = (char*)malloc(16*sizeof(char));
 		sprintf(key[i],"a/key/b-%d",i);
 		data[i] = data_create2(strlen(key[i])+1,strdup(key[i]));
 		tree_put(tree,key[i],data[i]);
-
+		
 	}
 	printf("here\n");
 
@@ -242,67 +239,17 @@ int testGetKeys() {
 
 /**************************************************************/
 
-int mainmain()
-{
-	setbuf(stdout, NULL);
-	printf("here\n");
-	
-	struct tree_t* tree = tree_create();
-	printf("here\n");
-	char* key1 = malloc(sizeof(char) * 5);
-	char* key2 = malloc(sizeof(char) * 5);
-	char* key3 = malloc(sizeof(char) * 5);
-	char* key4 = malloc(sizeof(char) * 5);
-	char* key5 = malloc(sizeof(char) * 5);
-	printf("here\n");
-	sprintf(key1,"a1");
-	sprintf(key2,"a23");
-	sprintf(key3,"a3");
-	sprintf(key4,"a21");
-	sprintf(key5,"a5");
-	printf("here\n");
-	struct data_t* data1 = data_create2(strlen(key1)+1,strdup(key1));
-	struct data_t* data2 = data_create2(strlen(key2)+1,strdup(key2));
-	struct data_t* data3 = data_create2(strlen(key3)+1,strdup(key3));
-	struct data_t* data4 = data_create2(strlen(key4)+1,strdup(key4));
-	struct data_t* data5 = data_create2(strlen(key5)+1,strdup(key5));
-	printf("here\n");
-
-	tree_put(tree, key1, data1);
-	printf("1");
-	tree_put(tree, key4, data4);
-	printf("2");
-	tree_put(tree, key3, data3);
-	printf("3");
-	tree_put(tree, key2, data2);
-	printf("4");
-	tree_put(tree, key5, data5);
-	printf("5\n");
-
-	free(key1);
-	free(key2);
-	free(key3);
-	free(key4);
-	free(key5);
-
-	tree_destroy(tree);
-	
-	tree_destroy(tree);
-	return 0;
-}
-
 int main() {
 	int score = 0;
 	setbuf(stdout, NULL);
 
 	printf("iniciando teste tree bin\n");
 
-	//mainmain();
-
+	printf("Tree_Vazia\n");
 	score += testTreeVazia();
-
+	printf("Tree_PutInexistente\n");
 	score += testPutInexistente();
-
+	printf("Tree_PutExistente\n");
 	score += testPutExistente();
 
 	//score += testDelInexistente();

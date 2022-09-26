@@ -19,22 +19,23 @@ struct tree_t *tree_create(){
 	return tree;
 }
 
+
 /* Função para libertar toda a memória ocupada por uma árvore.
  */
 void tree_destroy(struct tree_t *tree){
-
-	if(tree == NULL){
-		return;
-	}
-
-	if(tree->node != NULL){
-		entry_destroy(tree->node);
+	if(tree){
+		if(tree->node){
+			entry_destroy(tree->node);
+		}
+		if(tree->tree_left){
+			tree_destroy(tree->tree_left);
+		}
+		if(tree->tree_right){
+			tree_destroy(tree->tree_right);
+		}
+		free(tree);
 	}
 	
-	tree_destroy(tree->tree_left);
-	tree_destroy(tree->tree_right);
-
-	free(tree);
 }
 
 /* Função para adicionar um par chave-valor à árvore.
@@ -61,7 +62,8 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 	while(current != NULL){
 		
 		if(current->node == NULL){ // found empt node
-			current->node = entry;
+			current->node = entry_dup(entry);
+			entry_destroy(entry);
 			return 0;
 		}
 
@@ -79,12 +81,12 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 			current = current->tree_right;
 		}else{									//replace
 			entry_destroy(current->node);	
-			current->node = entry;
+			current->node = entry_dup(entry);
+			entry_destroy(entry);
 			return 0;
 		}
 	}
-	current->node = entry;
-	return 0;
+	return -1;
 }
 
 /* Função para obter da árvore o valor associado à chave key.
@@ -109,11 +111,9 @@ struct data_t *tree_get(struct tree_t *tree, char *key){
 	}else if(entry_compare(entry, tree->node) == 1){
 		entry_destroy(entry);
 		return tree_get(tree->tree_right, key);
-	}else{
-		entry_destroy(entry);
-		return tree->node->value;
 	}
-	return NULL;
+	entry_destroy(entry);
+	return tree->node->value;
 }
 
 /* Função para remover um elemento da árvore, indicado pela chave key,
@@ -150,8 +150,6 @@ int tree_height(struct tree_t *tree){
 	if(tree->tree_right != NULL){
 		right++;
 	}
-
-
 	return (left > right) ? left : right;
 }
 

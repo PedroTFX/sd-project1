@@ -55,7 +55,7 @@ struct data_t *data_create2(int size, void *data) {
  * libertando toda a memória por ele ocupada.
  */
 void data_destroy(struct data_t *data) {
-	if(data){
+	if(data != NULL){
 		if(data->data) {
 			free(data->data);
 		}
