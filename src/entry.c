@@ -10,10 +10,11 @@
  * memória para estes campos.
  */
 struct entry_t *entry_create(char *key, struct data_t *data) {
-	struct entry_t *entry = malloc(sizeof(struct entry_t));
+	struct entry_t* entry = malloc(sizeof(struct entry_t*));
 
 	if (entry == NULL) {
 		free(entry);
+		entry = NULL;
 		return NULL;
 	}
 
@@ -57,7 +58,7 @@ struct entry_t *entry_dup(struct entry_t *entry) {
 		return NULL;
 	}
 
-	struct entry_t *entry2 = malloc(sizeof(struct entry_t));
+	struct entry_t* entry2 = malloc(sizeof(struct entry_t*));
 
 	if (entry2 == NULL) {
 		free(entry2);
