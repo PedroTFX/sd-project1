@@ -34,9 +34,11 @@ void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_valu
 /* Função que elimina uma entry, libertando a memória por ela ocupada
  */
 void entry_destroy(struct entry_t *entry) {
+	if (entry != NULL) {
 	free(entry->key);
 	data_destroy(entry->value);   //double free
 	free(entry);
+	}
 }
 
 /* Função que duplica uma entry, reservando a memória necessária para a

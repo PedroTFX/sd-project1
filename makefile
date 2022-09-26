@@ -68,16 +68,19 @@ info:
 	@echo CC = $(CC)
 
 test_data:
-	gcc -g -Wall -o obj/data.o -c src/data.c -I include && gcc -g -Wall tests/test_data.c -o bin/test_data obj/data.o -Iinclude
+	$(CC) $(DEBUGFLAGS) -o obj/data.o -c src/data.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_data.c -o bin/test_data obj/data.o -I $(INCLUDEDIR)
 
-test_data_run:
-	$(test_data)
+test_data_run: test_data
 	./bin/test_data
 
-test_entry:
-	$(test_data)
-	gcc -g -Wall -o obj/entry.o -c src/entry.c -I include && gcc -g -Wall tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -Iinclude
+test_entry: test_data_run
+	$(CC) $(DEBUGFLAGS) -o obj/entry.o -c src/entry.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -I $(INCLUDEDIR)
 
-test_entry_run:
-	$(test_entry)
+test_entry_run: test_entry
 	./bin/test_entry
+
+test_tree: test_entry_run
+	$(CC) $(DEBUGFLAGS) -o obj/tree.o -c src/tree.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_tree.c -o bin/test_tree obj/data.o obj/entry.o obj/tree.o -I $(INCLUDEDIR)
+
+test_tree_run: test_tree
+	./bin/test_tree
