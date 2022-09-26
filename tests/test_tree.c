@@ -72,12 +72,17 @@ int testPutExistente() {
 	struct tree_t *tree = tree_create();
 	char *key[1024];
 	struct data_t *data[1024], *d;
+	printf("here\n");
 	for(i=0; i<1024; i++) {
-		key[i] = (char*)malloc(16*sizeof(char));
-		sprintf(key[i],"a/key/b-%d",i);
-		data[i] = data_create2(strlen(key[i])+1,strdup(key[i]));
-		tree_put(tree,key[i],data[i]);
 		
+		key[i] = (char*)malloc(16*sizeof(char));
+		
+		sprintf(key[i],"a/key/b-%d",i);
+		
+		data[i] = data_create2(strlen(key[i])+1,strdup(key[i]));
+		
+		tree_put(tree,key[i],data[i]);
+		printf("%d ", i);
 	}
 	printf("here\n");
 

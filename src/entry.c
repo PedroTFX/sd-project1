@@ -38,11 +38,14 @@ void entry_destroy(struct entry_t *entry) {
 	if(entry){
 		if(entry->value != NULL){
 			data_destroy(entry->value);
+			entry->value = NULL;
 		}
 		if(entry->key != NULL){
 			free(entry->key);
+			entry->key = NULL;
 		}
 		free(entry);
+		entry = NULL;
 	}
 }
 
@@ -51,7 +54,6 @@ void entry_destroy(struct entry_t *entry) {
  */
 struct entry_t *entry_dup(struct entry_t *entry) {
 	if(entry == NULL){
-		
 		return NULL;
 	}
 
