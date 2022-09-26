@@ -37,11 +37,11 @@ void tree_destroy(struct tree_t *tree){
 			tree_destroy(tree->tree_right);
 			tree->tree_right = NULL;
 		}
-		
+
 		free(tree);
 		tree = NULL;
 	}
-	
+
 }
 
 /* Função para adicionar um par chave-valor à árvore.
@@ -125,8 +125,7 @@ struct data_t *tree_get(struct tree_t *tree, char *key){
  * Retorna 0 (ok) ou -1 (key not found).
  */
 int tree_del(struct tree_t *tree, char *key){
-	
-	
+	return -2;
 }
 
 /* Função que devolve o número de elementos contidos na árvore.
