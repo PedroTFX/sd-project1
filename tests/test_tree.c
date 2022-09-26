@@ -2,19 +2,18 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <unistd.h>
 #include <string.h>
 #include <assert.h>
 
 #include "data.h"
 #include "entry.h"
 #include "tree.h"
-
 /**************************************************************/
 int testTreeVazia() {
 	struct tree_t *tree = tree_create();
 
 	int result = tree != NULL && tree_size(tree) == 0;
-
 	tree_destroy(tree);
 	
 	printf("tree - testTreeVazia: %s\n",result?"passou":"não passou");
@@ -28,19 +27,19 @@ int testPutInexistente() {
 	struct tree_t *tree = tree_create();
 	char *key[1024];
 	struct data_t *data[1024], *d;
-
 	for(i=0; i<1024; i++) {
 		key[i] = (char*)malloc(16*sizeof(char));
 		sprintf(key[i],"a/key/b-%d",i);
 		data[i] = data_create2(strlen(key[i])+1,strdup(key[i]));
-
 		tree_put(tree,key[i],data[i]);
+		
 	}
-
+	
 	assert(tree_size(tree) == 1024);
 	result = (tree_size(tree) == 1024);
-
+	printf("2 - for\n");
 	for(i=0; i<1024; i++) {
+
 		d = tree_get(tree,key[i]);
 
 		assert(d->datasize == data[i]->datasize);
@@ -53,12 +52,14 @@ int testPutInexistente() {
 		data_destroy(d);
 	}
 
+	printf("3 - for\n");
 	for(i=0; i<1024; i++) {
 		free(key[i]);
 		data_destroy(data[i]);
 	}
-
+	printf("tree destroy\n");
 	tree_destroy(tree);
+	
 	
 	printf("tree - testPutInexistente: %s\n",result?"passou":"não passou");
 	return result;
@@ -71,19 +72,20 @@ int testPutExistente() {
 	struct tree_t *tree = tree_create();
 	char *key[1024];
 	struct data_t *data[1024], *d;
-
 	for(i=0; i<1024; i++) {
 		key[i] = (char*)malloc(16*sizeof(char));
 		sprintf(key[i],"a/key/b-%d",i);
 		data[i] = data_create2(strlen(key[i])+1,strdup(key[i]));
-
 		tree_put(tree,key[i],data[i]);
+		
 	}
-
+	printf("here\n");
 
 	assert(tree_size(tree) == 1024);
 	result = (tree_size(tree) == 1024);
-
+	
+	printf("here\n");
+	
 	d = data_create2(strlen("256")+1,strdup("256"));
 	tree_put(tree,key[256],d);
 	data_destroy(d);
@@ -239,20 +241,22 @@ int testGetKeys() {
 
 int main() {
 	int score = 0;
+	setbuf(stdout, NULL);
 
 	printf("iniciando teste tree bin\n");
 
+	printf("Tree_Vazia\n");
 	score += testTreeVazia();
-
+	printf("Tree_PutInexistente\n");
 	score += testPutInexistente();
-
+	printf("Tree_PutExistente\n");
 	score += testPutExistente();
 
-	score += testDelInexistente();
+	//score += testDelInexistente();
 
-	score += testDelExistente();
+	//score += testDelExistente();
 
-	score += testGetKeys();
+	//score += testGetKeys();
 	
 	//aqui tmb pode ser adicionado um teste para o método tree_get_values
 
@@ -263,3 +267,6 @@ int main() {
     else
         return -1;
 }
+
+
+
