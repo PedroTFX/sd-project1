@@ -12,7 +12,6 @@
 struct tree_t *tree_create(){
 	struct tree_t* tree = malloc(sizeof(struct tree_t));
 	if(tree == NULL){
-		free(tree);
 		tree = NULL;
 		return NULL;
 	}
@@ -125,8 +124,40 @@ struct data_t *tree_get(struct tree_t *tree, char *key){
  * Retorna 0 (ok) ou -1 (key not found).
  */
 int tree_del(struct tree_t *tree, char *key){
-	
-	
+	struct tree_t* current_tree = tree;
+	struct entry_t* entry = malloc(sizeof(struct entry_t));
+	entry->key = strdup(key);
+
+	//find tree where node is
+	while(current_tree->node){
+		int comp = entry_compare(entry, current_tree->node);
+
+		if(comp <= -1){
+			current_tree = current_tree->tree_left;
+		}else if(comp >= 1){
+			current_tree = current_tree->tree_right;
+		}else{		//found tree
+			break;
+		}
+	}
+
+	int tree_size = tree_size(current_tree);
+	struct entry_t* children[tree_size];
+
+	for(int i = 0; i < tree_size; i++){
+		children[i] = malloc(sizeof(struct entry_t));
+		if(current_tree->tree_left){
+			children[i] = entry_dup(current_tree->tree_left->node);
+		}else if(current_tree->tree_right){
+			children[i] = entry_dup(current_tree->tree_right->node);
+		}else{
+
+		}
+		
+	}
+
+
+	return 0;
 }
 
 /* Função que devolve o número de elementos contidos na árvore.

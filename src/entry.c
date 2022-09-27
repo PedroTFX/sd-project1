@@ -13,8 +13,6 @@ struct entry_t *entry_create(char *key, struct data_t *data) {
 	struct entry_t* entry = malloc(sizeof(struct entry_t));
 
 	if (entry == NULL) {
-		free(entry);
-		entry = NULL;
 		return NULL;
 	}
 
