@@ -10,8 +10,8 @@ struct tree_t {
 	struct tree_t* tree_right;
 };
 
-struct entry_t* get_entry(struct tree_t* tree, struct entry_t* entrys);
+struct entry_t* put_tree(struct tree_t* treeOG, struct tree_t* treeGone);
 
-struct entry_t* get_tree(struct tree_t* tree, char* key);
+struct tree_t* get_tree(struct tree_t* tree, char* key);
 
 #endif

@@ -248,7 +248,7 @@ int main() {
 	printf("Tree_PutExistente\n");
 	score += testPutExistente();
 
-	//score += testDelInexistente();
+	score += testDelInexistente();
 
 	//score += testDelExistente();
 
