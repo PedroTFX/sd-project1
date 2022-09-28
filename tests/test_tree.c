@@ -120,7 +120,6 @@ int testDelInexistente() {
 	struct tree_t *tree = tree_create();
 	char *key;
 	struct data_t *data;
-
 	for(i=0; i<1024; i++) {
 		key = (char*)malloc(16*sizeof(char));
 		sprintf(key,"a/key/b-%d",i);
@@ -130,22 +129,18 @@ int testDelInexistente() {
 
 		data_destroy(data);
 	}
-
 	assert(tree_size(tree) == 1024);
 	result = (tree_size(tree) == 1024);
 
 	result = result && (tree_get(tree,"a/key/b-1024") == NULL) &&
 			   (tree_get(tree,"abc") == NULL);
-
 	result = result && (tree_del(tree,"a/key/b-1024") != 0) &&
 			   (tree_del(tree,"abc") != 0);
-
 	result = result && (tree_get(tree,"a/key/b-1024") == NULL) &&
 			   (tree_get(tree,"abc") == NULL);
 
 	assert(tree_size(tree) == 1024);
 	result = result && (tree_size(tree) == 1024);
-
 	tree_destroy(tree);
 	
 	printf("tree - testDelInexistente: %s\n",result?"passou":"não passou");
