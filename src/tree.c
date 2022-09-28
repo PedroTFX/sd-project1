@@ -69,8 +69,11 @@ int tree_del(struct tree_t *tree, char *key){
 
 /* Função que devolve o número de elementos contidos na árvore.
  */
-int tree_size(struct tree_t *tree){
-
+int tree_size(struct tree_t *tree){//pk nao fazer com uma variavel e retornar apenas essa variavel. tipo o size do array list
+	if(tree == NULL){
+		return 0;
+	}
+	return tree_size(tree->tree_left) + tree_size(tree->tree_right) + (tree->node != NULL);
 }
 
 /* Função que devolve a altura da árvore.
@@ -84,7 +87,8 @@ int tree_height(struct tree_t *tree){
  * reservando toda a memória necessária. As keys devem vir ordenadas segundo a ordenação lexicográfica das mesmas.
  */
 char **tree_get_keys(struct tree_t *tree){
-
+	char **array_keys[tree_size(tree)];
+	array_keys[0] = (char *)malloc(50);
 }
 
 /* Função que devolve um array de void* com a cópia de todas os values da
@@ -98,11 +102,17 @@ void **tree_get_values(struct tree_t *tree){
 /* Função que liberta toda a memória alocada por tree_get_keys().
  */
 void tree_free_keys(char **keys){
-
+	for (int key_index = 0; key_index < 3000; key_index++) {
+		free(keys[key_index]);
+	}
+	free(keys);
 }
 
 /* Função que liberta toda a memória alocada por tree_get_values().
  */
 void tree_free_values(void **values){
-
+	for (int value_index = 0; value_index < 3000; value_index++) {
+		data_destroy(values[value_index]);
+	}
+	free(values);
 }
