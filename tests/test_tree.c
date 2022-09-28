@@ -16,7 +16,7 @@ int testTreeVazia() {
 	int result = tree != NULL && tree_size(tree) == 0;
 
 	tree_destroy(tree);
-	
+
 	printf("tree - testTreeVazia: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -47,7 +47,7 @@ int testPutInexistente() {
 		assert(memcmp(d->data,data[i]->data,d->datasize) == 0);
 		assert(d->data != data[i]->data);
 
-		result = result && (d->datasize == data[i]->datasize && 
+		result = result && (d->datasize == data[i]->datasize &&
                            memcmp(d->data,data[i]->data,d->datasize) == 0 &&
                            d->data != data[i]->data);
 		data_destroy(d);
@@ -59,7 +59,7 @@ int testPutInexistente() {
 	}
 
 	tree_destroy(tree);
-	
+
 	printf("tree - testPutInexistente: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -93,12 +93,12 @@ int testPutExistente() {
 
 	for(i=0; i<1024; i++) {
 		d = tree_get(tree,key[i]);
-		
+
 		if(i==256) {
-			result = result && (d->datasize == strlen("256")+1 && 
+			result = result && (d->datasize == strlen("256")+1 &&
         	                   memcmp(d->data,"256",d->datasize) == 0);
 		} else {
-			result = result && (d->datasize == data[i]->datasize && 
+			result = result && (d->datasize == data[i]->datasize &&
         	                   memcmp(d->data,data[i]->data,d->datasize) == 0 &&
         	                   d->data != data[i]->data);
 		}
@@ -112,7 +112,7 @@ int testPutExistente() {
 	}
 
 	tree_destroy(tree);
-	
+
 	printf("tree - testPutExistente: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -151,7 +151,7 @@ int testDelInexistente() {
 	result = result && (tree_size(tree) == 1024);
 
 	tree_destroy(tree);
-	
+
 	printf("tree - testDelInexistente: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -193,7 +193,7 @@ int testDelExistente() {
 	result = result && (tree_size(tree) == 1022);
 
 	tree_destroy(tree);
-	
+
 	printf("tree - testDelExistente: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -216,7 +216,7 @@ int testGetKeys() {
 	data_destroy(d);
 
 	keys = tree_get_keys(tree);
-	
+
 	for(i=0; keys[i] != NULL; i++) {
 		achou = 0;
 		for(j=0; j<4; j++) {
@@ -253,7 +253,7 @@ int main() {
 	score += testDelExistente();
 
 	score += testGetKeys();
-	
+
 	//aqui tmb pode ser adicionado um teste para o método tree_get_values
 
 	printf("teste tree bin: %d/6\n",score);

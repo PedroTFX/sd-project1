@@ -51,7 +51,8 @@ setup:
 	mkdir -p $(BINDIR)
 	mkdir -p $(LIBDIR)
 
-
+resetup: setup
+	make clean
 #print makefile info
 info:
 	@echo TARGET = $(TARGET)

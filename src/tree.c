@@ -73,7 +73,7 @@ int tree_size(struct tree_t *tree){//pk nao fazer com uma variavel e retornar ap
 	if(tree == NULL){
 		return 0;
 	}
-	return tree_size(tree->tree_left) + tree_size(tree->tree_right) + (tree->node != NULL);
+	return tree_size(tree->left) + tree_size(tree->right) + (&(tree->entry) != NULL);
 }
 
 /* Função que devolve a altura da árvore.
