@@ -245,7 +245,7 @@ int main() {
 
 	score += testDelInexistente();
 
-	score += testDelExistente();
+	//score += testDelExistente();
 
 	//score += testGetKeys();
 	
