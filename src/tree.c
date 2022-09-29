@@ -18,12 +18,12 @@ void tree_destroy(struct tree_t *tree){
 
 	entry_destroy(&(tree->entry));
 
-	if (tree->left !=  NULL) {
-		tree_destroy(tree->left);
+	if (tree->left_node !=  NULL) {
+		tree_destroy(tree->left_node);
 	}
 
-	if (tree->right != NULL) {
-		tree_destroy(tree->right);
+	if (tree->right_node != NULL) {
+		tree_destroy(tree->right_node);
 	}
 
 	free(tree);
@@ -73,7 +73,7 @@ int tree_size(struct tree_t *tree){//pk nao fazer com uma variavel e retornar ap
 	if(tree == NULL){
 		return 0;
 	}
-	return tree_size(tree->left) + tree_size(tree->right) + (&(tree->entry) != NULL);
+	return tree_size(tree->left_node) + tree_size(tree->right_node) + (&(tree->entry) != NULL);
 }
 
 /* Função que devolve a altura da árvore.

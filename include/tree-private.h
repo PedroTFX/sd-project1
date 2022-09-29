@@ -6,8 +6,8 @@
 
 struct tree_t {
 	struct entry_t entry;
-	struct tree_t *left;
-	struct tree_t *right;
+	struct tree_t *left_node;
+	struct tree_t *right_node;
 };
 
 #endif
