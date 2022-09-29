@@ -42,6 +42,31 @@ void tree_destroy(struct tree_t *tree){
 	}
 	
 }
+
+struct tree_t* tree_dup(struct tree_t* tree){
+	if(!tree){
+		return NULL;
+	}
+	struct tree_t* tree_st = malloc(sizeof(struct tree_t));
+	if(!tree_st){ //error on init
+		tree_st = NULL;
+		return NULL;
+	}
+	memset(tree_st, 0, sizeof(struct tree_t));
+
+	if(tree->tree_left){
+		tree_st->tree_left = tree_dup(tree->tree_left);
+	}
+	if(tree->tree_right){
+		tree_st->tree_right = tree_dup(tree->tree_right);
+	}
+	if(tree->node){
+		tree_st->node = entry_dup(tree->node);
+	}
+
+	return tree_st;
+}
+
 /**
  * @brief Find the tree object from given key
  * 
@@ -140,22 +165,24 @@ int tree_size(struct tree_t *tree){
 
 //ja esta a ignorar o primeiro da treeGone
 struct entry_t* put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
-	printf("here\n");
+	//printf("here\n");
 	struct entry_t* entry = malloc(sizeof(struct entry_t));
-	printf("%d\n", treeGone == NULL);
+	
+	//printf("treeGone != NULL: %d\n", treeGone != NULL);
 	if(treeGone){
-		printf("%d\n", treeGone->tree_left == NULL);
+		//printf("%d\n", treeGone->tree_left != NULL);
 		if(treeGone->tree_left){
 			entry = put_tree(treeOG, treeGone->tree_left);
 			tree_put(treeOG, entry->key, entry->value);
 		} 
+		//printf("%d\n", treeGone->tree_right != NULL);
 		if(treeGone->tree_right){
 			entry = put_tree(treeOG, treeGone->tree_right);
 			tree_put(treeOG, entry->key, entry->value);
 		}
 	}
-	entry_destroy(entry);
-	return entry_dup(treeGone->node);
+
+	return (treeGone->node) ? entry_dup(treeGone->node) : NULL;
 }
 
 /* Função para remover um elemento da árvore, indicado pela chave key,
@@ -163,12 +190,12 @@ struct entry_t* put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
  * Retorna 0 (ok) ou -1 (key not found).
  */
 int tree_del(struct tree_t *tree, char *key){
-	struct tree_t* sub_tree = get_tree(tree, key);
-
-	printf("2\n");
-	tree_destroy(get_tree(tree, key));	
-	
-	printf("2\n");
+	struct tree_t* sub_tree = tree_dup(get_tree(tree, key));
+	if(!sub_tree){
+		printf("sub_tree NULL\n");
+		return -1;
+	}
+	tree_destroy(get_tree(tree, key));
 	put_tree(tree, sub_tree);
 	tree_destroy(sub_tree);
 	return 0;
