@@ -154,7 +154,6 @@ int testDelExistente() {
 	struct tree_t *tree = tree_create();
 	char *key;
 	struct data_t *data, *data2 = NULL;
-
 	for(i=0; i<1024; i++) {
 		key = (char*)malloc(16*sizeof(char));
 		sprintf(key,"a/key/b-%d",i);
@@ -235,17 +234,17 @@ int main() {
 	printf("iniciando teste tree bin\n");
 
 	printf("Tree_Vazia\n");
-	score += testTreeVazia();
+	//score += testTreeVazia();
 
 	printf("Tree_PutInexistente\n");
-	score += testPutInexistente();
+	//score += testPutInexistente();
 
 	printf("Tree_PutExistente\n");
-	score += testPutExistente();
+	//score += testPutExistente();
 
 	score += testDelInexistente();
 
-	//score += testDelExistente();
+	score += testDelExistente();
 
 	//score += testGetKeys();
 	

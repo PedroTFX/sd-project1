@@ -168,21 +168,22 @@ struct entry_t* put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
 	//printf("here\n");
 	struct entry_t* entry = malloc(sizeof(struct entry_t));
 	
-	//printf("treeGone != NULL: %d\n", treeGone != NULL);
+	printf("treeGone != NULL: %d\n", treeGone != NULL);
 	if(treeGone){
-		//printf("%d\n", treeGone->tree_left != NULL);
+		printf("%d:left\n", treeGone->tree_left != NULL);
 		if(treeGone->tree_left){
-			entry = put_tree(treeOG, treeGone->tree_left);
+			entry = entry_dup(put_tree(treeOG, treeGone->tree_left));
+			printf("hi");
 			tree_put(treeOG, entry->key, entry->value);
 		} 
-		//printf("%d\n", treeGone->tree_right != NULL);
+		printf("%d:right\n", treeGone->tree_right != NULL);
 		if(treeGone->tree_right){
-			entry = put_tree(treeOG, treeGone->tree_right);
+			entry = entry_dup(put_tree(treeOG, treeGone->tree_right));
 			tree_put(treeOG, entry->key, entry->value);
 		}
 	}
-
-	return (treeGone->node) ? entry_dup(treeGone->node) : NULL;
+	printf("return: %d\n", treeGone->node != NULL);
+	return (treeGone) ? treeGone->node : NULL;
 }
 
 /* Função para remover um elemento da árvore, indicado pela chave key,
@@ -191,12 +192,17 @@ struct entry_t* put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
  */
 int tree_del(struct tree_t *tree, char *key){
 	struct tree_t* sub_tree = tree_dup(get_tree(tree, key));
+	printf("%d\n", tree_size(get_tree(tree, key)));
+	printf("%d\n", tree_size(tree_dup(get_tree(tree, key))));
 	if(!sub_tree){
 		printf("sub_tree NULL\n");
 		return -1;
 	}
+	printf("2\n");
 	tree_destroy(get_tree(tree, key));
+	printf("2\n");
 	put_tree(tree, sub_tree);
+	printf("2\n");
 	tree_destroy(sub_tree);
 	return 0;
 }
