@@ -232,12 +232,39 @@ int testGetKeys() {
 }
 
 /**************************************************************/
+void test_joao()
+{
+	struct data_t *data = data_create(10);
+	struct data_t *data2 = data_create(9);
+	struct data_t *data3 = data_create(8);
+	struct data_t *data4 = data_create(7);
+/* 	struct data_t *data5 = data_create(6);
+	struct data_t *data6 = data_create(5);
+	struct data_t *data7 = data_create(4); */
 
+	struct tree_t *tree = tree_create();
+
+	tree_put(tree, "pila2", data2);
+	tree_put(tree, "pila4", data4);
+	tree_put(tree, "pila", data);
+	tree_put(tree, "pila3", data3);
+
+	struct tree_t *nodes = breadh_first(tree);
+
+	int size = tree_size(nodes);
+	for (int i = 0; i < size; i++)
+	{
+	}
+}
+/***********************************************************/
+//pila->pila2->pila3->pila4
 int main() {
 	int score = 0;
 	setbuf(stdout, NULL);
 
 	printf("iniciando teste tree bin\n");
+
+	test_joao();
 
 	printf("Tree_Vazia\n");
 	score += testTreeVazia();
@@ -250,9 +277,9 @@ int main() {
 
 	score += testDelInexistente();
 
-	score += testDelExistente();
+	//score += testDelExistente();
 
-	score += testGetKeys();
+	//score += testGetKeys();
 
 	//aqui tmb pode ser adicionado um teste para o método tree_get_values
 
