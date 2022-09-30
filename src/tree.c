@@ -162,6 +162,27 @@ int tree_height(struct tree_t *tree){
  * reservando toda a memória necessária. As keys devem vir ordenadas segundo a ordenação lexicográfica das mesmas.
  */
 char **tree_get_keys(struct tree_t *tree){
+	int size = tree_size(tree);
+	struct tree_t* nodes = malloc(size* sizeof (struct tree_t));
+	nodes[0] = *(tree);
+	int index = 0;
+	while (index < size)
+	{
+		if (nodes[index].tree_left != NULL)
+		{
+			nodes[index + 1] = *(nodes[index].tree_left);
+		}
+		if (nodes[index].tree_right != NULL)
+		{
+			nodes[index + 1] = *(nodes[index].tree_right);
+		}
+		index++;
+	}
+
+/* 	for (int i = 0; i < tree_size(tree); i++)
+	{
+	} */
+
 	return NULL;
 }
 
@@ -173,14 +194,43 @@ void **tree_get_values(struct tree_t *tree){
 	return NULL;
 }
 
-/* Função que liberta toda a memória alocada por tree_get_keys().
- */
-void tree_free_keys(char **keys){
-
+void tree_free_keys(char **keys)
+{
+	for (int key_index = 0; key_index < (sizeof (keys) / sizeof (char)); key_index++) {
+		free(keys[key_index]);
+	}
+	free(keys);
 }
 
 /* Função que liberta toda a memória alocada por tree_get_values().
  */
-void tree_free_values(void **values){
 
+void tree_free_values(void **values){
+	for (int value_index = 0; value_index < (sizeof(values) / sizeof(struct data_t)); value_index++)
+	{
+		data_destroy(values[value_index]);
+	}
+	free(values);
+}
+
+struct tree_t* breadh_first(struct tree_t *tree)
+{
+	int size = tree_size(tree);
+	struct tree_t *nodes = (struct tree_t *)malloc(size * sizeof (struct tree_t) + 3);
+	nodes[0] = *tree;
+	int index = 0;
+	while (index <= size) {
+		if (nodes[index].tree_left != NULL) {
+			nodes[index + 1] = *(nodes[index].tree_left);
+		}
+		//2 4 1 3
+		if ((nodes[index].tree_right != NULL && nodes[index].tree_left == NULL)) {
+			nodes[index + 1] = *(nodes[index].tree_right);
+		}
+/* 		else {
+			nodes[index + 2] = *(nodes[index].tree_right);
+		} */
+		index++;
+	}
+	return nodes;
 }
