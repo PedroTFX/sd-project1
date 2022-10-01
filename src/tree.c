@@ -29,42 +29,20 @@ void tree_destroy(struct tree_t *tree){
 			tree->node = NULL;
 		}
 		if(tree->tree_left){
+			memset(tree->tree_left, 0, sizeof(struct tree_t));
 			tree_destroy(tree->tree_left);
 			tree->tree_left = NULL;
 		}
 		if(tree->tree_right){
+			memset(tree->tree_right, 0, sizeof(struct tree_t));
 			tree_destroy(tree->tree_right);
 			tree->tree_right = NULL;
 		}
-		//memset(tree, 0, sizeof(struct tree_t));
+		memset(tree, 0, sizeof(struct tree_t));
 		free(tree);
 		tree = NULL;
 	}
 	
-}
-
-struct tree_t* tree_dup(struct tree_t* tree){
-	if(!tree){
-		return NULL;
-	}
-	struct tree_t* tree_st = malloc(sizeof(struct tree_t));
-	if(!tree_st){ //error on init
-		tree_st = NULL;
-		return NULL;
-	}
-	memset(tree_st, 0, sizeof(struct tree_t));
-
-	if(tree->tree_left){
-		tree_st->tree_left = tree_dup(tree->tree_left);
-	}
-	if(tree->tree_right){
-		tree_st->tree_right = tree_dup(tree->tree_right);
-	}
-	if(tree->node){
-		tree_st->node = entry_dup(tree->node);
-	}
-
-	return tree_st;
 }
 
 /**
@@ -90,7 +68,7 @@ struct tree_t* get_tree(struct tree_t* tree, char* key){
 			return get_tree(current_tree->tree_left, key);
 		}else if(comp == 1 && current_tree->tree_right){
 			return get_tree(current_tree->tree_right, key);
-		}else{			//notfound
+		}else{			//not found
 			return NULL;
 		}
 	}
@@ -110,31 +88,27 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 	struct entry_t* entry = malloc(sizeof(struct entry_t));
 	entry->key = strdup(key);
 	entry->value = data_dup(value);
-
-	if(!current_tree->node){
-		current_tree->node = entry_dup(entry);
-		entry_destroy(entry);
-		return 0;
-	}
-
+	
 	while(current_tree->node){
 		int comp = entry_compare(entry, current_tree->node);
-
-		if(comp <= -1){
+		
+		if(comp == -1){
 			if(!current_tree->tree_left){
 				current_tree->tree_left = tree_create();
 			}
 			current_tree = current_tree->tree_left;
-		}else if(comp >= 1){
+		}else if(comp == 1){
 			if(!current_tree->tree_right){
 				current_tree->tree_right = tree_create();
 			}
 			current_tree = current_tree->tree_right;
 		}else{				//replace
+			memset(current_tree->node, 0, sizeof(struct entry_t));
 			entry_destroy(current_tree->node);		//clean bef put
 			break;
 		}
 	}
+	
 	current_tree->node = entry_dup(entry);
 	entry_destroy(entry);
 	return 0;
@@ -163,27 +137,36 @@ int tree_size(struct tree_t *tree){
 	return tree_size(tree->tree_left) + tree_size(tree->tree_right) + (tree->node != NULL);
 }
 
-//ja esta a ignorar o primeiro da treeGone
-struct entry_t* put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
-	//printf("here\n");
-	struct entry_t* entry = malloc(sizeof(struct entry_t));
+//WORKS
+struct tree_t* tree_dup(struct tree_t* tree){
+	struct tree_t* tree_st = tree_create();
 	
-	printf("treeGone != NULL: %d\n", treeGone != NULL);
-	if(treeGone){
-		printf("%d:left\n", treeGone->tree_left != NULL);
-		if(treeGone->tree_left){
-			entry = entry_dup(put_tree(treeOG, treeGone->tree_left));
-			printf("hi");
-			tree_put(treeOG, entry->key, entry->value);
-		} 
-		printf("%d:right\n", treeGone->tree_right != NULL);
-		if(treeGone->tree_right){
-			entry = entry_dup(put_tree(treeOG, treeGone->tree_right));
-			tree_put(treeOG, entry->key, entry->value);
+	if(tree){
+		if(tree->node){
+			tree_st->node = tree->node;
+		}
+		if(tree->tree_left){
+			tree_st->tree_left = tree_dup(tree->tree_left);
+		}
+		if(tree->tree_right){
+			tree_st->tree_right = tree_dup(tree->tree_right);
 		}
 	}
-	printf("return: %d\n", treeGone->node != NULL);
-	return (treeGone) ? treeGone->node : NULL;
+	return tree_st;
+}
+//pointers not freed
+void tree_put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
+	if(treeOG){
+		if(treeOG->node){
+			entry_destroy(tree1->node);
+		}
+		if(treeOG->tree_left){
+			delete_entry(tree1->tree_left);
+		}
+		if(treeOG->tree_right){
+			delete_entry(tree1->tree_right);
+		}
+	}
 }
 
 /* Função para remover um elemento da árvore, indicado pela chave key,
@@ -192,18 +175,16 @@ struct entry_t* put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
  */
 int tree_del(struct tree_t *tree, char *key){
 	struct tree_t* sub_tree = tree_dup(get_tree(tree, key));
-	printf("%d\n", tree_size(get_tree(tree, key)));
-	printf("%d\n", tree_size(tree_dup(get_tree(tree, key))));
-	if(!sub_tree){
-		printf("sub_tree NULL\n");
+	if(!get_tree(tree, key)){ // key not found
 		return -1;
 	}
-	printf("2\n");
 	tree_destroy(get_tree(tree, key));
-	printf("2\n");
-	put_tree(tree, sub_tree);
-	printf("2\n");
-	tree_destroy(sub_tree);
+	
+
+
+
+
+
 	return 0;
 }
 

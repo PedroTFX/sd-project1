@@ -234,16 +234,18 @@ int main() {
 	printf("iniciando teste tree bin\n");
 
 	printf("Tree_Vazia\n");
-	//score += testTreeVazia();
+	score += testTreeVazia();
 
 	printf("Tree_PutInexistente\n");
-	//score += testPutInexistente();
+	score += testPutInexistente();
 
 	printf("Tree_PutExistente\n");
-	//score += testPutExistente();
+	score += testPutExistente();
 
+	printf("testDelInexistente\n");
 	score += testDelInexistente();
 
+	printf("testDelExistente\n");
 	score += testDelExistente();
 
 	//score += testGetKeys();
