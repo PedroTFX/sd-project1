@@ -26,23 +26,15 @@ void tree_destroy(struct tree_t *tree){
 	if(tree){
 		if(tree->node){
 			entry_destroy(tree->node);
-			tree->node = NULL;
 		}
 		if(tree->tree_left){
-			memset(tree->tree_left, 0, sizeof(struct tree_t));
 			tree_destroy(tree->tree_left);
-			tree->tree_left = NULL;
 		}
 		if(tree->tree_right){
-			memset(tree->tree_right, 0, sizeof(struct tree_t));
 			tree_destroy(tree->tree_right);
-			tree->tree_right = NULL;
 		}
-		memset(tree, 0, sizeof(struct tree_t));
 		free(tree);
-		tree = NULL;
 	}
-	
 }
 
 /**
@@ -103,7 +95,6 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 			}
 			current_tree = current_tree->tree_right;
 		}else{				//replace
-			memset(current_tree->node, 0, sizeof(struct entry_t));
 			entry_destroy(current_tree->node);		//clean bef put
 			break;
 		}
@@ -156,15 +147,15 @@ struct tree_t* tree_dup(struct tree_t* tree){
 }
 //pointers not freed
 void tree_put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
-	if(treeOG){
-		if(treeOG->node){
-			entry_destroy(tree1->node);
+	if(treeGone){
+		if(treeGone->node){
+			tree_put(treeOG, treeGone->node->key, treeGone->node->value);
 		}
-		if(treeOG->tree_left){
-			delete_entry(tree1->tree_left);
+		if(treeGone->tree_left){
+			tree_put_tree(treeOG, treeGone->tree_left);
 		}
-		if(treeOG->tree_right){
-			delete_entry(tree1->tree_right);
+		if(treeGone->tree_right){
+			tree_put_tree(treeOG, treeGone->tree_right);
 		}
 	}
 }
@@ -174,16 +165,26 @@ void tree_put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
  * Retorna 0 (ok) ou -1 (key not found).
  */
 int tree_del(struct tree_t *tree, char *key){
-	struct tree_t* sub_tree = tree_dup(get_tree(tree, key));
-	if(!get_tree(tree, key)){ // key not found
+	struct tree_t* sub_tree = get_tree(tree, key);
+	if(!sub_tree){
 		return -1;
 	}
-	tree_destroy(get_tree(tree, key));
-	
 
+	//pretended delete : PD
+	if(tree_size(sub_tree) == 1){	//if the PD is a leaf find and delete
+		sub_tree->node = NULL;
+		entry_destroy(sub_tree->node);
+	}else if(sub_tree->tree_left && sub_tree->tree_right){		//if the PD is not a leaf and has two trees duplicate the next biggest value(tree_right)
+		sub_tree->node = NULL;									//repeat the proccess till it finds a tree that doesnt have two trees
+		tree->node = entry_dup(sub_tree->tree_right->node);		// if the PD only has 1 tree unlink the node and link to next node
+		tree_del(sub_tree->tree_right, sub_tree->tree_right->node->key);
 
+	}else if(sub_tree->tree_left){
+		tree = sub_tree->tree_left;
 
-
+	}else if(sub_tree->tree_right){
+		tree = sub_tree->tree_right;
+	}
 
 	return 0;
 }
