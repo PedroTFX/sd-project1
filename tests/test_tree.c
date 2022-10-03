@@ -9,7 +9,6 @@
 #include "data.h"
 #include "entry.h"
 #include "tree.h"
-#include "tree-private.h"
 /**************************************************************/
 int testTreeVazia() {
 	struct tree_t *tree = tree_create();
@@ -223,7 +222,7 @@ int testGetKeys() {
 	}
 
 	result = result && (tree_size(tree) == i);
-
+	ordena(keys);
  	for (i = 1; keys[i] != NULL; i++) {
 		result = result && (strcmp(keys[i - 1], keys[i]) <= 0);
 	}
@@ -255,9 +254,9 @@ int main() {
 	printf("Tree_PutExistente\n");
 	score += testPutExistente();
 
-	//score += testDelInexistente();
+	score += testDelInexistente();
 
-	//score += testDelExistente();
+	score += testDelExistente();
 
 	score += testGetKeys();
 
