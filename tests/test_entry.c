@@ -11,7 +11,7 @@ int testCreate() {
 
 	struct entry_t *entry = entry_create(key, value);
 
-	int result = (entry->key == key) && 
+	int result = (entry->key == key) &&
                      (entry->value == value);
 
 	entry_destroy(entry);
@@ -32,9 +32,9 @@ int testDup() {
 	struct entry_t *entry2 = entry_dup(entry);
 
 	result = entry2 != entry;
-	
+
 	result = result && (entry->key != entry2->key) &&
-		              (strcmp(entry->key,entry2->key) == 0) && 
+		              (strcmp(entry->key,entry2->key) == 0) &&
                         (entry->value != entry2->value) &&
 		              (entry->value->datasize == entry2->value->datasize) &&
                         (memcmp(entry->value->data, entry2->value->data, entry->value->datasize) == 0);
@@ -125,11 +125,11 @@ int main() {
 	score += testCreate();
 
 	score += testDup();
-	
+
 	score += testDestroy();
-	
+
 	score += testReplace();
-	
+
 	score += testCompare();
 
 	printf("teste entry bin: %d/5\n",score);
