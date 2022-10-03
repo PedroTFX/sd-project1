@@ -12,4 +12,5 @@ struct tree_t {
 
 char ** tree_get_keys_aux(struct tree_t *, char **, int );
 void **tree_get_values_aux(struct tree_t *, void **, int);
+void ordena(char **);
 #endif
