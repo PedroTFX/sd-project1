@@ -1,15 +1,15 @@
 {
 	"configurations": [
 		{
-			"name": "Mac",
+			"name": "Linux",
 			"includePath": [
 				"${default}",
 				"${workspaceFolder}/include"
 			],
 			"defines": [],
 			"macFrameworkPath": [],
-			//"compilerPath": "/usr/bin/gcc",
-			"compilerPath": "C:/msys64/mingw64/bin/gcc.exe",
+			//"compilerPath": "C:/msys64/mingw64/bin/gcc.exe",
+			"compilerPath": "/usr/bin/gcc",
 			"cStandard": "gnu11",
 			"cppStandard": "gnu++11",
 			"intelliSenseMode": "linux-gcc-x64"
