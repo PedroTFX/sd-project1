@@ -10,15 +10,16 @@
  * memória para estes campos.
  */
 struct entry_t *entry_create(char *key, struct data_t *data) {
-	struct entry_t *entry = (struct entry_t *)malloc(sizeof(struct entry_t));
+	struct entry_t* entry = malloc(sizeof(struct entry_t));
 
 	if (entry == NULL) {
+		free(entry);
+		entry = NULL;
 		return NULL;
 	}
 
 	entry->key = key;
     entry->value = data;
-
     return entry;
 }
 
@@ -27,6 +28,7 @@ struct entry_t *entry_create(char *key, struct data_t *data) {
 */
 void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_value){
     data_destroy(entry->value);
+	free(entry->key);
     entry->key = new_key;
     entry->value = new_value;
 }
@@ -34,10 +36,17 @@ void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_valu
 /* Função que elimina uma entry, libertando a memória por ela ocupada
  */
 void entry_destroy(struct entry_t *entry) {
-	if (entry != NULL) {
-	free(entry->key);
-	data_destroy(entry->value);   //double free
-	free(entry);
+	if(entry){
+		if(entry->value != NULL){
+			data_destroy(entry->value);
+			entry->value = NULL;
+		}
+		if(entry->key != NULL){
+			free(entry->key);
+			entry->key = NULL;
+		}
+		free(entry);
+		entry = NULL;
 	}
 }
 
@@ -45,39 +54,21 @@ void entry_destroy(struct entry_t *entry) {
  * nova estrutura.
  */
 struct entry_t *entry_dup(struct entry_t *entry) {
-	struct entry_t *entry2 = (struct entry_t *)malloc(sizeof(struct entry_t));
-
-	if (entry == NULL) {
+	if(entry == NULL){
 		return NULL;
 	}
 
-	entry2->key = (char *)malloc(strlen(entry->key) + 1);
-	strcpy(entry2->key, entry->key);
+	struct entry_t* entry2 = malloc(sizeof(struct entry_t));
 
-	entry2->value = (struct data_t*)malloc(sizeof (struct data_t));
-	entry2->value->datasize = entry->value->datasize;
-	entry2->value->data = malloc(entry->value->datasize);
-	memcpy(entry2->value->data, entry->value->data, entry->value->datasize);
+	if (entry2 == NULL) {
+		free(entry2);
+		return NULL;
+	}
 
+	entry2->key = strdup(entry->key);
+	entry2->value = data_dup(entry->value);
 	return entry2;
 }
-
-/* int main(int argc, char const *argv[])
-{
-    struct data_t *data = data_create(4);
-    struct entry_t *entry = entry_create("a", data);
-    print(entry);
-
-    //struct data_t *data2 = data_create(4);
-    struct entry_t *entry2 = entry_dup(entry); // works
-    print(entry2);
-
-    entry_replace(entry2, "b", entry->value); //works
-
-    printf("compare data: %d\n",entry_compare(entry, entry2));// work
-
-    print(entry);
-} */
 
 /* Função que compara duas entradas e retorna a ordem das mesmas.
 *  Ordem das entradas é definida pela ordem das suas chaves.
@@ -86,17 +77,7 @@ contrário.
 */
 int entry_compare(struct entry_t *entry1, struct entry_t *entry2) {
 	int result = strcmp(entry1->key, entry2->key);
-	if (result > 0) {
-		return 1;
-	} else if (result < 0) {
-		return -1;
-	} else {
-		return 0;
-	}
+	return (result == 0) ? 0 : (result > 0) ? 1 : -1;
 }
 
-void print(struct entry_t *entry) {
-	printf("entry key: %s\n", entry->key);
-	printf("value data (pointer): %p\n", entry->value->data);
-	printf("value datasize: %d\n", entry->value->datasize);
-}
+
