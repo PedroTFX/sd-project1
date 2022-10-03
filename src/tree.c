@@ -200,10 +200,8 @@ char **tree_get_keys(struct tree_t *tree)
 	return keyPtrs;
 }
 
-char **tree_get_keys_aux(struct tree_t *node, char **keyPtrs, int index)
-{
-	if (node == NULL)
-	{
+char **tree_get_keys_aux(struct tree_t *node, char **keyPtrs, int index) {
+	if (node == NULL) {
 		return keyPtrs;
 	}
 
@@ -254,11 +252,31 @@ void tree_free_keys(char **keys)
 /* Função que liberta toda a memória alocada por tree_get_values().
  */
 
-void tree_free_values(void **values)
-{
-	for (int i = 0; values[i] != NULL; i++)
-	{
+void tree_free_values(void **values) {
+	for (int i = 0; values[i] != NULL; i++) {
 		data_destroy(values[i]);
 	}
 	free(values);
+}
+
+void ordena(char **keyPtrs) {
+	for (int i = 0; keyPtrs[i] != NULL; i++) {
+		printf(keyPtrs[i]);
+		printf("\n");
+	}
+
+	for (int i = 0; keyPtrs[i] != NULL ; i++) {
+		for (int j = i; keyPtrs[j] != NULL; j++) {
+			if (strcmp(keyPtrs[j],keyPtrs[i]) < 0) {
+				char* temp = keyPtrs[i];
+				keyPtrs[i] = keyPtrs[j];
+				keyPtrs[j] = temp;
+			}
+		}
+	}
+
+	for (int i = 0; keyPtrs[i] != NULL; i++) {
+		printf(keyPtrs[i]);
+		printf("\n");
+	}
 }
