@@ -220,7 +220,7 @@ char **tree_get_keys_aux(struct tree_t *node, char **keyPtrs, int index) {
  */
 void ** tree_get_values(struct tree_t *tree) {
 	int size = tree_size(tree) + 1;
-	void **valuePtrs = (void **)malloc(size * sizeof(char *));
+	void **valuePtrs = (void **)malloc(size * sizeof(struct data_t *)); // e mesmo "sizeof(struct data_t*)" assim???
 	valuePtrs = tree_get_values_aux(tree, valuePtrs, 0);
 	valuePtrs[size - 1] = NULL;
 	return valuePtrs;
@@ -232,7 +232,7 @@ void **tree_get_values_aux(struct tree_t *node, void **valuePtrs, int index) {
 	}
 
 	valuePtrs[index] = malloc(sizeof (struct data_t));
-	strcpy(valuePtrs[index], node->node->key);
+	memcpy(valuePtrs[index], node->node->value, sizeof(struct data_t));
 
 	tree_get_values_aux(node->tree_left, valuePtrs, ++index);
 	tree_get_values_aux(node->tree_right, valuePtrs, ++index);
