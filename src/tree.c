@@ -260,10 +260,10 @@ void tree_free_values(void **values) {
 }
 
 void ordena(char **keyPtrs) {
-	for (int i = 0; keyPtrs[i] != NULL; i++) {
+/* 	for (int i = 0; keyPtrs[i] != NULL; i++) {
 		printf(keyPtrs[i]);
 		printf("\n");
-	}
+	} */
 
 	for (int i = 0; keyPtrs[i] != NULL ; i++) {
 		for (int j = i; keyPtrs[j] != NULL; j++) {
@@ -275,8 +275,8 @@ void ordena(char **keyPtrs) {
 		}
 	}
 
-	for (int i = 0; keyPtrs[i] != NULL; i++) {
+/* 	for (int i = 0; keyPtrs[i] != NULL; i++) {
 		printf(keyPtrs[i]);
 		printf("\n");
-	}
+	} */
 }
