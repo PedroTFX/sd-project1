@@ -8,3 +8,12 @@ make && gcc -g -Wall tests/test_tree.c -o bin/test_tree obj/tree.o -Iinclude && 
 
 
 make && gcc -g -Wall tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -Iinclude && ./bin/test_entry
+
+
+## TODO
+Data ✅
+Entry ✅
+Tree
+	Get values
+Serialization
+Deserialization
