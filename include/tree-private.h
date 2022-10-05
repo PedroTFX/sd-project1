@@ -10,6 +10,9 @@ struct tree_t {
 	struct tree_t* tree_right;
 };
 
+
 struct tree_t* get_tree(struct tree_t* tree, char* key);
+
+struct tree_t *breadh_first(struct tree_t *);
 
 #endif

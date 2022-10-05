@@ -15,7 +15,7 @@ int testTreeVazia() {
 
 	int result = tree != NULL && tree_size(tree) == 0;
 	tree_destroy(tree);
-	
+
 	printf("tree - testTreeVazia: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -31,7 +31,7 @@ int testPutInexistente() {
 		key[i] = (char*)malloc(16*sizeof(char));
 		sprintf(key[i],"a/key/b-%d",i);
 		data[i] = data_create2(strlen(key[i])+1,strdup(key[i]));
-		
+
 		tree_put(tree,key[i],data[i]);
 	}
 
@@ -44,7 +44,7 @@ int testPutInexistente() {
 		assert(memcmp(d->data,data[i]->data,d->datasize) == 0);
 		assert(d->data != data[i]->data);
 
-		result = result && (d->datasize == data[i]->datasize && 
+		result = result && (d->datasize == data[i]->datasize &&
                            memcmp(d->data,data[i]->data,d->datasize) == 0 &&
                            d->data != data[i]->data);
 		data_destroy(d);
@@ -54,7 +54,7 @@ int testPutInexistente() {
 		data_destroy(data[i]);
 	}
 	tree_destroy(tree);
-	
+
 	printf("tree - testPutInexistente: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -70,16 +70,16 @@ int testPutExistente() {
 		key[i] = (char*)malloc(16*sizeof(char));
 		sprintf(key[i],"a/key/b-%d",i);
 		data[i] = data_create2(strlen(key[i])+1,strdup(key[i]));
-		
+
 		tree_put(tree,key[i],data[i]);
 	}
-	
+
 
 	assert(tree_size(tree) == 1024);
 	result = (tree_size(tree) == 1024);
-	
-	
-	
+
+
+
 	d = data_create2(strlen("256")+1,strdup("256"));
 	tree_put(tree,key[256],d);
 	data_destroy(d);
@@ -89,12 +89,12 @@ int testPutExistente() {
 
 	for(i=0; i<1024; i++) {
 		d = tree_get(tree,key[i]);
-		
+
 		if(i==256) {
-			result = result && (d->datasize == strlen("256")+1 && 
+			result = result && (d->datasize == strlen("256")+1 &&
         	                   memcmp(d->data,"256",d->datasize) == 0);
 		} else {
-			result = result && (d->datasize == data[i]->datasize && 
+			result = result && (d->datasize == data[i]->datasize &&
         	                   memcmp(d->data,data[i]->data,d->datasize) == 0 &&
         	                   d->data != data[i]->data);
 		}
@@ -108,7 +108,7 @@ int testPutExistente() {
 	}
 
 	tree_destroy(tree);
-	
+
 	printf("tree - testPutExistente: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -142,7 +142,7 @@ int testDelInexistente() {
 	assert(tree_size(tree) == 1024);
 	result = result && (tree_size(tree) == 1024);
 	tree_destroy(tree);
-	
+
 	printf("tree - testDelInexistente: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -183,7 +183,7 @@ int testDelExistente() {
 	result = result && (tree_size(tree) == 1022);
 
 	tree_destroy(tree);
-	
+
 	printf("tree - testDelExistente: %s\n",result?"passou":"não passou");
 	return result;
 }
@@ -206,7 +206,7 @@ int testGetKeys() {
 	data_destroy(d);
 
 	keys = tree_get_keys(tree);
-	
+
 	for(i=0; keys[i] != NULL; i++) {
 		achou = 0;
 		for(j=0; j<4; j++) {
@@ -226,12 +226,39 @@ int testGetKeys() {
 }
 
 /**************************************************************/
+void test_joao()
+{
+	struct data_t *data = data_create(10);
+	struct data_t *data2 = data_create(9);
+	struct data_t *data3 = data_create(8);
+	struct data_t *data4 = data_create(7);
+/* 	struct data_t *data5 = data_create(6);
+	struct data_t *data6 = data_create(5);
+	struct data_t *data7 = data_create(4); */
 
+	struct tree_t *tree = tree_create();
+
+	tree_put(tree, "pila2", data2);
+	tree_put(tree, "pila4", data4);
+	tree_put(tree, "pila", data);
+	tree_put(tree, "pila3", data3);
+
+	struct tree_t *nodes = breadh_first(tree);
+
+	int size = tree_size(nodes);
+	for (int i = 0; i < size; i++)
+	{
+	}
+}
+/***********************************************************/
+//pila->pila2->pila3->pila4
 int main() {
 	int score = 0;
 	setbuf(stdout, NULL);
 
 	printf("iniciando teste tree bin\n");
+
+	test_joao();
 
 	printf("Tree_Vazia\n");
 	score += testTreeVazia();
@@ -249,7 +276,7 @@ int main() {
 	score += testDelExistente();
 
 	//score += testGetKeys();
-	
+
 	//aqui tmb pode ser adicionado um teste para o método tree_get_values
 
 	printf("teste tree bin: %d/6\n",score);
@@ -259,6 +286,3 @@ int main() {
     else
         return -1;
 }
-
-
-
