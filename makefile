@@ -1,3 +1,4 @@
+
 TARGET := example
 
 EXTENSION := cpp
@@ -48,7 +49,7 @@ clean:
 
 
 #setup directory
-setup:
+setup: 
 	mkdir -p $(OBJDIR)
 	mkdir -p $(BINDIR)
 	mkdir -p $(LIBDIR)
@@ -132,3 +133,4 @@ test_serial: test_tree
 
 test_serial_run: test_serial
 	./bin/test_serialization
+

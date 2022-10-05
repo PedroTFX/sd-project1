@@ -9,9 +9,16 @@ struct tree_t {
 	struct tree_t* tree_right;
 };
 
-char ** tree_get_keys_aux(struct tree_t *, char **, int );
-void tree_get_values_aux(struct tree_t *, struct data_t **, int);
-void ordena(char **);
-int found_str_in_array(char *, char **, int);
-int index_of_string_in_array(char *, char **, int);
+
+
+char ** tree_get_keys_aux(struct tree_t *tree, char **key, int index);
+
+void **tree_get_values_aux(struct tree_t *tree, struct data_t **values, int index);
+
+void ordena(char **keys);
+
+struct tree_t* get_tree(struct tree_t* tree, char* key);
+
+struct tree_t *breadh_first(struct tree_t *);
+
 #endif
