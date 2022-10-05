@@ -1,3 +1,4 @@
+
 TARGET := example
 
 EXTENSION := cpp
@@ -48,7 +49,7 @@ clean:
 
 
 #setup directory
-setup:
+setup: 
 	mkdir -p $(OBJDIR)
 	mkdir -p $(BINDIR)
 	mkdir -p $(LIBDIR)
@@ -126,4 +127,4 @@ test_tree: test_entry_run
 
 test_tree_run: test_tree
 	./bin/test_tree
-
+	

@@ -38,7 +38,7 @@ int testDup() {
                         (entry->value != entry2->value) &&
 		              (entry->value->datasize == entry2->value->datasize) &&
                         (memcmp(entry->value->data, entry2->value->data, entry->value->datasize) == 0);
-
+	
 	entry_destroy(entry);
 	entry_destroy(entry2);
 
@@ -95,7 +95,7 @@ int testCompare(){
 	struct entry_t *entry2 = entry_create(key2, value2);
 	struct entry_t *entry3 = entry_create(key3, value3);
 	struct entry_t *entry4 = entry_create(key4, value4);
-
+	
 	result = (entry_compare(entry1, entry2) == -1);
 	result = result && (entry_compare(entry4, entry2) == -1);
 	result = result && (entry_compare(entry2, entry1) == 1);
@@ -104,12 +104,12 @@ int testCompare(){
 	result = result && (entry_compare(entry2, entry3) == -1);
 	result = result && (entry_compare(entry1, entry4) == 0);
 	result = result && (entry_compare(entry4, entry1) == 0);
-
+	
 	entry_destroy(entry1);
 	entry_destroy(entry2);
 	entry_destroy(entry3);
 	entry_destroy(entry4);
-
+	
 	printf("entry - testCompare: %s\n",result?"passou":"não passou");
 	return result;
 }

@@ -1,3 +1,4 @@
+
 #define NDEBUG
 
 #include <stdlib.h>
@@ -269,3 +270,4 @@ int main() {
     else
         return -1;
 }
+

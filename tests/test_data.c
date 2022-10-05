@@ -199,6 +199,22 @@ int testReplace(){
 	return result;
 }
 
+/*
+int mainmain()
+{
+	char* key = malloc(sizeof(char));
+	key = "k";
+	//struct data_t* data[1024]
+	struct data_t* data = data_create2(strlen(key), strdup(key));
+	
+	data_destroy(data);
+
+	data_destroy(data);
+
+	return 0;
+}
+*/
+
 
 /**************************************************************/
 int main() {
@@ -217,6 +233,8 @@ int main() {
 	score += testDestroy();
 
 	score += testReplace();
+
+	//mainmain();
 
 	printf("teste data bin: %d/6\n",score);
 
