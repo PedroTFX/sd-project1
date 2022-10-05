@@ -127,3 +127,5 @@ test_tree: test_entry_run
 test_tree_run: test_tree
 	./bin/test_tree
 
+test_get_values:
+	$(CC) $(DEBUGFLAGS) -o obj/data.o -o obj/entry.o -o obj/tree.o -c src/data.c -c src/entry.c -c src/tree.c -I $(INCLUDEDIR)
