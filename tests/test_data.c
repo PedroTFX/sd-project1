@@ -132,11 +132,11 @@ int testDup() {
 	result = result && (data_dup(data) == NULL);
 
 	free(data->data);
-
+	
 	data->data = NULL;
 	assert(data_dup(data) == NULL);
 	result = result && (data_dup(data) == NULL);
-
+	
 	data->datasize = 1;
 	assert(data_dup(data) == NULL);
 	result = result && (data_dup(data) == NULL);
@@ -145,12 +145,12 @@ int testDup() {
 
 	if ((data = data_create2(data_size,data_s)) == NULL)
 		pee("  O teste não pode prosseguir");
-
+	
 	data2 = data_dup(data);
-
+	
 	result = result && (data2 != data);
 
-	result = result && (data->data != data2->data) &&
+	result = result && (data->data != data2->data) && 
                  (data->datasize == data2->datasize) &&
                  (memcmp(data->data, data2->data, data->datasize) == 0);
 
@@ -185,7 +185,7 @@ int testReplace(){
 	printf("Módulo data -> teste testReplace:");
 
 	data = data_create2(data_size, data_s);
-
+	
 	data_replace(data, data_size2, data_s2);
 
 	result = (data->data == data_s2);
@@ -199,22 +199,6 @@ int testReplace(){
 	return result;
 }
 
-/*
-int mainmain()
-{
-	char* key = malloc(sizeof(char));
-	key = "k";
-	//struct data_t* data[1024]
-	struct data_t* data = data_create2(strlen(key), strdup(key));
-	
-	data_destroy(data);
-
-	data_destroy(data);
-
-	return 0;
-}
-*/
-
 
 /**************************************************************/
 int main() {
@@ -225,16 +209,14 @@ int main() {
 	score += testCreate();
 
 	score += testCreate2();
-
+	
 	score += testCreate3();
 
 	score += testDup();
-
+	
 	score += testDestroy();
-
+	
 	score += testReplace();
-
-	//mainmain();
 
 	printf("teste data bin: %d/6\n",score);
 
