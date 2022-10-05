@@ -9,15 +9,13 @@ struct tree_t {
 	struct tree_t* tree_right;
 };
 
-
-
-char ** tree_get_keys_aux(struct tree_t *tree, char **key, int index);
-
-void **tree_get_values_aux(struct tree_t *tree, struct data_t **values, int index);
-
-void ordena(char **keys);
-
 struct tree_t* get_tree(struct tree_t* tree, char* key);
+
+
+
+void tree_get_keys_aux(struct tree_t *tree, char **key, int index);
+
+struct data_t **tree_get_values_aux(struct tree_t *tree, struct data_t **values, int index);
 
 struct tree_t *breadh_first(struct tree_t *);
 

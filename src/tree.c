@@ -221,23 +221,26 @@ char **tree_get_keys(struct tree_t *tree)
 	return keyPtrs;
 }
 
-char **tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
-	if (tree == NULL) {
-		return keyPtrs;
+void tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
+	if (!tree || !tree->node){
+		return;
+	}
+	keyPtrs[index] = malloc(strlen(tree->node->key) * sizeof(char));
+	if(!keyPtrs[index]){ // error on init
+		return;
 	}
 
-	keyPtrs[index] = malloc(strlen(tree->node->key) + 1);
+	//a tree ja esta ordenada de forma lexicografica from TL to N to TR
+	if(tree->tree_left){
+		tree_get_keys_aux(tree->tree_left, keyPtrs, index);
+		index++;
+	}
 	strcpy(keyPtrs[index], tree->node->key);
-
-	if (tree->tree_left != NULL) {
-		tree_get_keys_aux(tree->tree_left, keyPtrs, ++index);
+		index++;
+	if(tree->tree_right){
+		tree_get_keys_aux(tree->tree_right, keyPtrs, index);
+		index++;
 	}
-
-	if (tree->tree_right != NULL) {
-		tree_get_keys_aux(tree->tree_right, keyPtrs, ++index);
-	}
-
-	return keyPtrs;
 }
 
 /* Função que devolve um array de void* com a cópia de todas os values da
@@ -248,7 +251,7 @@ void ** tree_get_values(struct tree_t *tree) {
 
 	int size = tree_size(tree);
 	struct data_t **valuePtrs = malloc((size+1) * sizeof(struct data_t));
-  if(!valuePtrs){
+  	if(!valuePtrs){
 		return NULL;
 	}
 
@@ -258,21 +261,19 @@ void ** tree_get_values(struct tree_t *tree) {
 }
 
 
-void tree_get_values_aux(struct tree_t *tree, struct data_t **valuePtrs, int index) {
-	if (tree == NULL) {
-		return;
+struct data_t **tree_get_values_aux(struct tree_t *tree, struct data_t **valuePtrs, int index) {
+	if (!tree) {
+		return NULL;
 	}
-
 	valuePtrs[index] = data_dup(tree->node->value);
 
 	if (tree->tree_left != NULL) {
 		tree_get_values_aux(tree->tree_left, valuePtrs, ++index);
 	}
-
-
 	if (tree->tree_right != NULL) {
 		tree_get_values_aux(tree->tree_right, valuePtrs, ++index);
 	}
+	return valuePtrs;
 }
 
 void tree_free_keys(char **keys)
@@ -291,16 +292,4 @@ void tree_free_values(void **values) {
 		data_destroy(values[i]);
 	}
 	free(values);
-}
-
-void ordena(char **keyPtrs) {
-	for (int i = 0; keyPtrs[i] != NULL ; i++) {
-		for (int j = i; keyPtrs[j] != NULL; j++) {
-			if (strcmp(keyPtrs[j],keyPtrs[i]) < 0) {
-				char* temp = keyPtrs[i];
-				keyPtrs[i] = keyPtrs[j];
-				keyPtrs[j] = temp;
-			}
-		}
-	}
 }
