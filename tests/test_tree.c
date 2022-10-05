@@ -9,6 +9,8 @@
 #include "data.h"
 #include "entry.h"
 #include "tree.h"
+#include "tree-private.h"
+
 /**************************************************************/
 int testTreeVazia() {
 	struct tree_t *tree = tree_create();
@@ -222,7 +224,9 @@ int testGetKeys() {
 	}
 
 	result = result && (tree_size(tree) == i);
+
 	ordena(keys);
+
  	for (i = 1; keys[i] != NULL; i++) {
 		result = result && (strcmp(keys[i - 1], keys[i]) <= 0);
 	}
@@ -236,6 +240,53 @@ int testGetKeys() {
 }
 
 /**************************************************************/
+int testGetValues() {
+	int result = 1;
+	struct tree_t *tree = tree_create();
+
+	char *keys[5] = {"joaoa", "joaob", "joaoc", "joaod", "joaoe"};
+	char *values[5] = {"santosa", "santosb", "santosc", "santosd", "santose"};
+
+	struct data_t *data0 = data_create2(strlen(values[0]) + 1, values[0]);
+	struct data_t *data1 = data_create2(strlen(values[1]) + 1, values[1]);
+	struct data_t *data2 = data_create2(strlen(values[2]) + 1, values[2]);
+	struct data_t *data3 = data_create2(strlen(values[3]) + 1, values[3]);
+	struct data_t *data4 = data_create2(strlen(values[4]) + 1, values[4]);
+
+	tree_put(tree, keys[0], data0);
+	tree_put(tree, keys[1], data1);
+	tree_put(tree, keys[2], data2);
+	tree_put(tree, keys[3], data3);
+	tree_put(tree, keys[4], data4);
+
+	struct data_t **tree_values = (struct data_t **) tree_get_values(tree);
+
+	for (int i = 0; tree_values[i] != NULL; i++) {
+		int size = sizeof(values) / sizeof(values[0]);
+		result = result && found_str_in_array(tree_values[i]->data, values, size);
+	}
+
+	tree_free_values((void **)tree_values);
+
+	tree_destroy(tree);
+
+	printf("tree - testGetValues: %s\n", result ? "passou" : "não passou");
+
+	return result;
+}
+
+int found_str_in_array(char* string, char** array, int size) {
+	return index_of_string_in_array(string, array, size) > -1;
+}
+
+int index_of_string_in_array(char* string, char** array, int size) {
+	for (int i = 0; i < size; i++) {
+		if(strcmp(string, array[i]) == 0) {
+			return i;
+		}
+	}
+	return -1;
+}
 
 /***********************************************************/
 int main() {
@@ -244,14 +295,10 @@ int main() {
 
 	printf("iniciando teste tree bin\n");
 
-
-	printf("Tree_Vazia\n");
 	score += testTreeVazia();
 
-	printf("Tree_PutInexistente\n");
 	score += testPutInexistente();
 
-	printf("Tree_PutExistente\n");
 	score += testPutExistente();
 
 	score += testDelInexistente();
@@ -260,11 +307,11 @@ int main() {
 
 	score += testGetKeys();
 
-	//aqui tmb pode ser adicionado um teste para o método tree_get_values
+	score += testGetValues();
 
-	printf("teste tree bin: %d/6\n",score);
+	printf("teste tree bin: %d/7\n", score);
 
-    if (score == 6)
+    if (score == 7)
         return 0;
     else
         return -1;
