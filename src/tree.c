@@ -1,3 +1,4 @@
+
 /* Módulo tree */
 #include <stdlib.h>
 #include <data.h>
@@ -217,43 +218,60 @@ int tree_height(struct tree_t *tree){
  * árvore, colocando o último elemento do array com o valor NULL e
  * reservando toda a memória necessária. As keys devem vir ordenadas segundo a ordenação lexicográfica das mesmas.
  */
-char **tree_get_keys(struct tree_t *tree){
-	int size = tree_size(tree);
-	struct tree_t* nodes = malloc(size* sizeof (struct tree_t));
-	nodes[0] = *(tree);
-	int index = 0;
-	while (index < size)
-	{
-		if (nodes[index].tree_left != NULL)
-		{
-			nodes[index + 1] = *(nodes[index].tree_left);
-		}
-		if (nodes[index].tree_right != NULL)
-		{
-			nodes[index + 1] = *(nodes[index].tree_right);
-		}
-		index++;
+char **tree_get_keys(struct tree_t *tree)
+{
+	int size = tree_size(tree) + 1;
+	char **keyPtrs = (char **)malloc(size * sizeof(char *));
+	keyPtrs = tree_get_keys_aux(tree, keyPtrs, 0);
+	keyPtrs[size - 1] = NULL;
+	return keyPtrs;
+}
+
+char **tree_get_keys_aux(struct tree_t *node, char **keyPtrs, int index) {
+	if (node == NULL) {
+		return keyPtrs;
 	}
 
-/* 	for (int i = 0; i < tree_size(tree); i++)
-	{
-	} */
+	keyPtrs[index] = (char *)malloc(strlen(node->node->key) + 1);
+	strcpy(keyPtrs[index], node->node->key);
 
-	return NULL;
+	tree_get_keys_aux(node->tree_left, keyPtrs, ++index);
+	tree_get_keys_aux(node->tree_right, keyPtrs, ++index);
+
+	return keyPtrs;
 }
 
 /* Função que devolve um array de void* com a cópia de todas os values da
  * árvore, colocando o último elemento do array com o valor NULL e
  * reservando toda a memória necessária.
  */
-void **tree_get_values(struct tree_t *tree){
-	return NULL;
+void ** tree_get_values(struct tree_t *tree) {
+	int size = tree_size(tree) + 1;
+	void **valuePtrs = (void **)malloc(size * sizeof(char *));
+	valuePtrs = tree_get_values_aux(tree, valuePtrs, 0);
+	valuePtrs[size - 1] = NULL;
+	return valuePtrs;
+}
+
+void **tree_get_values_aux(struct tree_t *node, void **valuePtrs, int index) {
+	if (node == NULL) {
+		return valuePtrs;
+	}
+
+	valuePtrs[index] = malloc(sizeof (struct data_t));
+	strcpy(valuePtrs[index], node->node->key);
+
+	tree_get_values_aux(node->tree_left, valuePtrs, ++index);
+	tree_get_values_aux(node->tree_right, valuePtrs, ++index);
+
+	return valuePtrs;
 }
 
 void tree_free_keys(char **keys)
 {
-	for (int key_index = 0; key_index < (sizeof (keys) / sizeof (char)); key_index++) {
-		free(keys[key_index]);
+	for (int i = 0; keys[i] != NULL; i++)
+	{
+		free(keys[i]);
 	}
 	free(keys);
 }
@@ -261,32 +279,31 @@ void tree_free_keys(char **keys)
 /* Função que liberta toda a memória alocada por tree_get_values().
  */
 
-void tree_free_values(void **values){
-	for (int value_index = 0; value_index < (sizeof(values) / sizeof(struct data_t)); value_index++)
-	{
-		data_destroy(values[value_index]);
+void tree_free_values(void **values) {
+	for (int i = 0; values[i] != NULL; i++) {
+		data_destroy(values[i]);
 	}
 	free(values);
 }
 
-struct tree_t* breadh_first(struct tree_t *tree)
-{
-	int size = tree_size(tree);
-	struct tree_t *nodes = (struct tree_t *)malloc(size * sizeof (struct tree_t) + 3);
-	nodes[0] = *tree;
-	int index = 0;
-	while (index <= size) {
-		if (nodes[index].tree_left != NULL) {
-			nodes[index + 1] = *(nodes[index].tree_left);
+void ordena(char **keyPtrs) {
+/* 	for (int i = 0; keyPtrs[i] != NULL; i++) {
+		printf(keyPtrs[i]);
+		printf("\n");
+	} */
+
+	for (int i = 0; keyPtrs[i] != NULL ; i++) {
+		for (int j = i; keyPtrs[j] != NULL; j++) {
+			if (strcmp(keyPtrs[j],keyPtrs[i]) < 0) {
+				char* temp = keyPtrs[i];
+				keyPtrs[i] = keyPtrs[j];
+				keyPtrs[j] = temp;
+			}
 		}
-		//2 4 1 3
-		if ((nodes[index].tree_right != NULL && nodes[index].tree_left == NULL)) {
-			nodes[index + 1] = *(nodes[index].tree_right);
-		}
-/* 		else {
-			nodes[index + 2] = *(nodes[index].tree_right);
-		} */
-		index++;
 	}
-	return nodes;
+
+/* 	for (int i = 0; keyPtrs[i] != NULL; i++) {
+		printf(keyPtrs[i]);
+		printf("\n");
+	} */
 }

@@ -1,3 +1,4 @@
+
 TARGET := example
 
 EXTENSION := cpp

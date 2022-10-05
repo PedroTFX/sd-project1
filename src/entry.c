@@ -13,6 +13,8 @@ struct entry_t *entry_create(char *key, struct data_t *data) {
 	struct entry_t* entry = malloc(sizeof(struct entry_t));
 
 	if (entry == NULL) {
+		free(entry);
+		entry = NULL;
 		return NULL;
 	}
 	entry->key = key;
@@ -34,10 +36,10 @@ void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_valu
  */
 void entry_destroy(struct entry_t *entry) {
 	if(entry){
-		if(entry->value != NULL){
+		if(entry->value){
 			data_destroy(entry->value);
 		}
-		if(entry->key != NULL){
+		if(entry->key){
 			free(entry->key);
 		}
 		free(entry);
@@ -53,6 +55,7 @@ struct entry_t *entry_dup(struct entry_t *entry) {
 	}
 
 	struct entry_t* entry2 = malloc(sizeof(struct entry_t));
+
 	if (entry2 == NULL) {
 		return NULL;
 	}

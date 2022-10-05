@@ -1,3 +1,4 @@
+
 #define NDEBUG
 
 #include <stdlib.h>
@@ -120,6 +121,7 @@ int testDelInexistente() {
 	struct tree_t *tree = tree_create();
 	char *key;
 	struct data_t *data;
+
 	for(i=0; i<1024; i++) {
 		key = (char*)malloc(16*sizeof(char));
 		sprintf(key,"a/key/b-%d",i);
@@ -129,18 +131,22 @@ int testDelInexistente() {
 
 		data_destroy(data);
 	}
+
 	assert(tree_size(tree) == 1024);
 	result = (tree_size(tree) == 1024);
 
 	result = result && (tree_get(tree,"a/key/b-1024") == NULL) &&
 			   (tree_get(tree,"abc") == NULL);
+
 	result = result && (tree_del(tree,"a/key/b-1024") != 0) &&
 			   (tree_del(tree,"abc") != 0);
+
 	result = result && (tree_get(tree,"a/key/b-1024") == NULL) &&
 			   (tree_get(tree,"abc") == NULL);
 
 	assert(tree_size(tree) == 1024);
 	result = result && (tree_size(tree) == 1024);
+
 	tree_destroy(tree);
 
 	printf("tree - testDelInexistente: %s\n",result?"passou":"não passou");
@@ -154,6 +160,7 @@ int testDelExistente() {
 	struct tree_t *tree = tree_create();
 	char *key;
 	struct data_t *data, *data2 = NULL;
+
 	for(i=0; i<1024; i++) {
 		key = (char*)malloc(16*sizeof(char));
 		sprintf(key,"a/key/b-%d",i);
@@ -216,6 +223,10 @@ int testGetKeys() {
 	}
 
 	result = result && (tree_size(tree) == i);
+	ordena(keys);
+ 	for (i = 1; keys[i] != NULL; i++) {
+		result = result && (strcmp(keys[i - 1], keys[i]) <= 0);
+	}
 
 	tree_free_keys(keys);
 
@@ -226,39 +237,14 @@ int testGetKeys() {
 }
 
 /**************************************************************/
-void test_joao()
-{
-	struct data_t *data = data_create(10);
-	struct data_t *data2 = data_create(9);
-	struct data_t *data3 = data_create(8);
-	struct data_t *data4 = data_create(7);
-/* 	struct data_t *data5 = data_create(6);
-	struct data_t *data6 = data_create(5);
-	struct data_t *data7 = data_create(4); */
 
-	struct tree_t *tree = tree_create();
-
-	tree_put(tree, "pila2", data2);
-	tree_put(tree, "pila4", data4);
-	tree_put(tree, "pila", data);
-	tree_put(tree, "pila3", data3);
-
-	struct tree_t *nodes = breadh_first(tree);
-
-	int size = tree_size(nodes);
-	for (int i = 0; i < size; i++)
-	{
-	}
-}
 /***********************************************************/
-//pila->pila2->pila3->pila4
 int main() {
 	int score = 0;
 	setbuf(stdout, NULL);
 
 	printf("iniciando teste tree bin\n");
 
-	test_joao();
 
 	printf("Tree_Vazia\n");
 	score += testTreeVazia();
@@ -269,13 +255,11 @@ int main() {
 	printf("Tree_PutExistente\n");
 	score += testPutExistente();
 
-	printf("testDelInexistente\n");
 	score += testDelInexistente();
 
-	printf("testDelExistente\n");
 	score += testDelExistente();
 
-	//score += testGetKeys();
+	score += testGetKeys();
 
 	//aqui tmb pode ser adicionado um teste para o método tree_get_values
 
@@ -286,3 +270,4 @@ int main() {
     else
         return -1;
 }
+

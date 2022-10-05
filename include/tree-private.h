@@ -11,6 +11,12 @@ struct tree_t {
 };
 
 
+char ** tree_get_keys_aux(struct tree_t *tree, char **key, int size);
+
+void **tree_get_values_aux(struct tree_t *tree, void **values, int size);
+
+void ordena(char **keys);
+
 struct tree_t* get_tree(struct tree_t* tree, char* key);
 
 struct tree_t *breadh_first(struct tree_t *);
