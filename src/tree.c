@@ -229,8 +229,13 @@ char **tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 	keyPtrs[index] = malloc(strlen(tree->node->key) + 1);
 	strcpy(keyPtrs[index], tree->node->key);
 
-	tree_get_keys_aux(tree->tree_left, keyPtrs, ++index);
-	tree_get_keys_aux(tree->tree_right, keyPtrs, ++index);
+	if (node->tree_left != NULL) {
+		tree_get_keys_aux(node->tree_left, keyPtrs, ++index);
+	}
+
+	if (node->tree_right != NULL) {
+		tree_get_keys_aux(node->tree_right, keyPtrs, ++index);
+	}
 
 	return keyPtrs;
 }
@@ -240,29 +245,34 @@ char **tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
  * reservando toda a memória necessária.
  */
 void ** tree_get_values(struct tree_t *tree) {
-	int size = tree_size(tree) + 1;
-	void **valuePtrs = malloc(size* sizeof(char));
-	if(!valuePtrs){
+
+	int size = tree_size(tree);
+	struct data_t **valuePtrs = malloc((size+1) * sizeof(struct data_t));
+  if(!valuePtrs){
 		return NULL;
 	}
-	
+
 	tree_get_values_aux(tree, valuePtrs, 0);
 	valuePtrs[size - 1] = NULL;
-	return valuePtrs;
+	return (void **) valuePtrs;
 }
 
-void **tree_get_values_aux(struct tree_t *tree, void **valuePtrs, int index) {
-	if (!tree) {
-		return valuePtrs;
+
+void tree_get_values_aux(struct tree_t *node, struct data_t **valuePtrs, int index) {
+	if (node == NULL) {
+		return;
 	}
 
-	valuePtrs[index] = malloc(sizeof (struct data_t));
-	strcpy(valuePtrs[index], tree->node->key);
+	valuePtrs[index] = data_dup(node->node->value);
 
-	tree_get_values_aux(tree->tree_left, valuePtrs, ++index);
-	tree_get_values_aux(tree->tree_right, valuePtrs, ++index);
+	if (node->tree_left != NULL) {
+		tree_get_values_aux(node->tree_left, valuePtrs, ++index);
+	}
 
-	return valuePtrs;
+
+	if (node->tree_right != NULL) {
+		tree_get_values_aux(node->tree_right, valuePtrs, ++index);
+	}
 }
 
 void tree_free_keys(char **keys)

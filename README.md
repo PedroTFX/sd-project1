@@ -15,5 +15,5 @@ Data ✅
 Entry ✅
 Tree
 	Get values
-Serialization
-Deserialization
+Serialization ✅
+Deserialization✅??

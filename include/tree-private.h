@@ -1,7 +1,6 @@
 #ifndef _TREE_PRIVATE_H
 #define _TREE_PRIVATE_H
 
-#include "tree.h"
 #include "entry.h"
 
 struct tree_t {
@@ -11,9 +10,10 @@ struct tree_t {
 };
 
 
-char ** tree_get_keys_aux(struct tree_t *tree, char **key, int size);
 
-void **tree_get_values_aux(struct tree_t *tree, void **values, int size);
+char ** tree_get_keys_aux(struct tree_t *tree, char **key, int index);
+
+void **tree_get_values_aux(struct tree_t *tree, struct data_t **values, int index);
 
 void ordena(char **keys);
 

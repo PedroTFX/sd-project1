@@ -8,7 +8,7 @@
 			"name": "Debug",
 			"type": "cppdbg",
 			"request": "launch",
-			"program": "${workspaceFolder}/bin/test_tree",
+			"program": "${workspaceFolder}/bin/test_serialization",
 			"args": [
 			],
 			"stopAtEntry": false,
