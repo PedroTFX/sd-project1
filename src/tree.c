@@ -215,6 +215,9 @@ char **tree_get_keys(struct tree_t *tree)
 {
 	int size = tree_size(tree) + 1;
 	char **keyPtrs = malloc(size * sizeof(char));
+	if(!keyPtrs){
+		return NULL;
+	}
 
 	tree_get_keys_aux(tree, keyPtrs, 0);
 	keyPtrs[size - 1] = NULL;
@@ -228,17 +231,21 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 
 	//a tree ja esta ordenada de forma lexicografica from TL to N to TR
 	if(tree->tree_left){
-		index += tree_get_keys_aux(tree->tree_left, keyPtrs, index);
+		index = tree_get_keys_aux(tree->tree_left, keyPtrs, index);
 	}
+
 	keyPtrs[index] = malloc(strlen(tree->node->key) * sizeof(char));
 	if(!keyPtrs[index]){ // error on init
 		return -1;
 	}
 	strcpy(keyPtrs[index], tree->node->key);
 		index++;
+
 	if(tree->tree_right){
-		index = tree_get_keys_aux(tree->tree_right, keyPtrs, index);
+		tree_get_keys_aux(tree->tree_right, keyPtrs, index);
+		index++;
 	}
+	
 	return index;
 }
 
@@ -248,8 +255,8 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
  */
 void ** tree_get_values(struct tree_t *tree) {
 
-	int size = tree_size(tree);
-	struct data_t **valuePtrs = malloc((size+1) * sizeof(struct data_t));
+	int size = tree_size(tree) + 1;
+	struct data_t **valuePtrs = malloc(size * sizeof(struct data_t));
   	if(!valuePtrs){
 		return NULL;
 	}
@@ -260,27 +267,36 @@ void ** tree_get_values(struct tree_t *tree) {
 }
 
 
-struct data_t **tree_get_values_aux(struct tree_t *tree, struct data_t **valuePtrs, int index) {
-	if (!tree) {
-		return NULL;
+int tree_get_values_aux(struct tree_t *tree, struct data_t **valuePtrs, int index) {
+	if (!tree || !tree->node){
+		return -1;
+	}
+
+	//a tree ja esta ordenada de forma lexicografica from TL to N to TR
+	if(tree->tree_left){
+		index = tree_get_values_aux(tree->tree_left, valuePtrs, index);
+	}
+
+	valuePtrs[index] = malloc(sizeof(struct data_t));
+	if(!valuePtrs[index]){ // error on init
+		return -1;
 	}
 	valuePtrs[index] = data_dup(tree->node->value);
+		index++;
 
-	if (tree->tree_left != NULL) {
-		tree_get_values_aux(tree->tree_left, valuePtrs, ++index);
+	if(tree->tree_right){
+		tree_get_values_aux(tree->tree_right, valuePtrs, index);
+		index++;
 	}
-	if (tree->tree_right != NULL) {
-		tree_get_values_aux(tree->tree_right, valuePtrs, ++index);
-	}
-	return valuePtrs;
+	
+	return index;
 }
 
 void tree_free_keys(char **keys)
 {
-	for (int i = 0; keys[i] != NULL; i++){
+	for (int i = 0; keys[i]; i++){
 		free(keys[i]);
 	}
-	free(keys);
 }
 
 /* Função que liberta toda a memória alocada por tree_get_values().
