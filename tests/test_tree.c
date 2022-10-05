@@ -205,21 +205,18 @@ int testGetKeys() {
 	int result = 1,i,j,achou;
 	struct tree_t *tree = tree_create();
 	char **keys;
-	char *k[4] = {"def","bcd","cde","abc"};
+	char *k[4] = {"abc","bcd","cde","def"};
 	struct data_t *d = data_create(5);
-	
+
 	tree_put(tree,k[3],d);
 	tree_put(tree,k[2],d);
 	tree_put(tree,k[1],d);
 	tree_put(tree,k[0],d);
 
 	data_destroy(d);
-	keys = tree_get_keys(tree);
-	for ( int i = 0; keys[i];i++){
-		printf("entry key: %s\n", keys[i]);
-	}
-	
 
+	keys = tree_get_keys(tree);
+	
 	for(i=0; keys[i] != NULL; i++) {
 		achou = 0;
 		for(j=0; j<4; j++) {
@@ -227,8 +224,9 @@ int testGetKeys() {
 		}
 		result = (result && achou);
 	}
+
 	result = result && (tree_size(tree) == i);
-	printf("%d\n", result);
+
 	tree_free_keys(keys);
 
 	tree_destroy(tree);

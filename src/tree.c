@@ -221,26 +221,25 @@ char **tree_get_keys(struct tree_t *tree)
 	return keyPtrs;
 }
 
-void tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
+int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 	if (!tree || !tree->node){
-		return;
-	}
-	keyPtrs[index] = malloc(strlen(tree->node->key) * sizeof(char));
-	if(!keyPtrs[index]){ // error on init
-		return;
+		return -1;
 	}
 
 	//a tree ja esta ordenada de forma lexicografica from TL to N to TR
 	if(tree->tree_left){
-		tree_get_keys_aux(tree->tree_left, keyPtrs, index);
-		index++;
+		index += tree_get_keys_aux(tree->tree_left, keyPtrs, index);
+	}
+	keyPtrs[index] = malloc(strlen(tree->node->key) * sizeof(char));
+	if(!keyPtrs[index]){ // error on init
+		return -1;
 	}
 	strcpy(keyPtrs[index], tree->node->key);
 		index++;
 	if(tree->tree_right){
-		tree_get_keys_aux(tree->tree_right, keyPtrs, index);
-		index++;
+		index = tree_get_keys_aux(tree->tree_right, keyPtrs, index);
 	}
+	return index;
 }
 
 /* Função que devolve um array de void* com a cópia de todas os values da
