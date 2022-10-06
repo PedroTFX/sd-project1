@@ -4,7 +4,8 @@
 		{
 			"label": "Compile",
 			"type": "shell",
-			"command": "make test_serial",
+			//"command": "make test_serial",
+			"command": "make test_tree",
 			"problemMatcher": [
 				"$gcc"
 			]
