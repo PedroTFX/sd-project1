@@ -9,8 +9,6 @@
 #include "entry.h"
 #include "tree.h"
 
-#include "tree-private.h"
-
 /**************************************************************/
 int testTreeVazia() {
 	struct tree_t *tree = tree_create();
@@ -207,26 +205,21 @@ int testGetKeys() {
 	int result = 1,i,j,achou;
 	struct tree_t *tree = tree_create();
 	char **keys;
-	char *k[7] = {"4","2","6","1","5","7","3"};
+	char *k[4] = {"abc","bcd","cde","def"};
 	struct data_t *d = data_create(5);
 
-	for(int i = 0; i < 7;i++){
-		tree_put(tree, k[i], d);
-	}
-	
-	print_tree(tree);
-	tree_del(tree, "6");
-	printf("size: %d\n", tree_size(tree));
+	tree_put(tree,k[3],d);
+	tree_put(tree,k[2],d);
+	tree_put(tree,k[1],d);
+	tree_put(tree,k[0],d);
+
 	data_destroy(d);
-	
+
 	keys = tree_get_keys(tree);
-	for(int i = 0; keys[i];i++){
-		printf("key: %s\n",keys[i]);
-	}
 	
 	for(i=0; keys[i] != NULL; i++) {
 		achou = 0;
-		for(j=0; j<7; j++) {
+		for(j=0; j<4; j++) {
 			achou = (achou || (strcmp(keys[i],k[j]) == 0));
 		}
 		result = (result && achou);

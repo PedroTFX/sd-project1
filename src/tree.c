@@ -199,12 +199,10 @@ int tree_del(struct tree_t *tree, char *key){
 		entry_replace(sub_tree->node, tree_min->key, tree_min->value);
 		tree_del(sub_tree->tree_right, tree_min->key);
 	}else if(sub_tree->tree_left){
-		printf("left\n");
 		entry_replace(sub_tree->node, sub_tree->tree_left->node->key, sub_tree->tree_left->node->value);
 		tree_del(sub_tree->tree_left, sub_tree->tree_left->node->key);
 		
 	}else if(sub_tree->tree_right){
-		printf("right\n");
 		entry_replace(sub_tree->node, sub_tree->tree_right->node->key, sub_tree->tree_right->node->value);
 		tree_del(sub_tree->tree_right, sub_tree->tree_right->node->key);
 	}
