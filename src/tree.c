@@ -168,7 +168,7 @@ void print_tree(struct tree_t* tree){
 		print_tree(tree->tree_left);
 	}
 	if(tree->node){
-		//printf("%s\n", tree->node->key);
+		printf("%s\n", tree->node->key);
 	}
 	
 	if(tree->tree_right){
@@ -188,43 +188,27 @@ int tree_del(struct tree_t *tree, char *key){
 	if(!sub_tree){
 		return -1;
 	}
-	printf("key del: %s\n", sub_tree->node->key);
-	//pretended delete : PD
-	printf("tree_size i: %d\n", tree_size(sub_tree));
-	//printf("boom: %d\n",sub_tree->tree_left && sub_tree->tree_right );
+
 	if(tree_size(sub_tree) == 1){ //works				//if the PD is a leaf 
-		printf("---leaf---\n");
-		memset(sub_tree, 0, (sizeof(struct tree_t)));	//reclaim mem
-		//tree_destroy(sub_tree);
-		//sub_tree = NULL;
-		//printf("boom222: %d\n",sub_tree->tree_left && sub_tree->tree_right);
+		sub_tree->node = NULL;
+		sub_tree = NULL;
 		return 0;
 
 	}else if(sub_tree->tree_left && sub_tree->tree_right){		//if the PD is not a leaf and has two trees duplicate the next biggest value(tree_right)
 		struct entry_t* tree_min = min(sub_tree->tree_right);
-		printf("min key: %s\n", tree_min->key);
-		sub_tree->node = entry_dup(tree_min);
 		entry_replace(sub_tree->node, tree_min->key, tree_min->value);
-		//print_tree(tree);
-		printf("\n");
 		tree_del(sub_tree->tree_right, tree_min->key);
-		//sub_tree->tree_right = NULL;
-		
 	}else if(sub_tree->tree_left){
 		printf("left\n");
 		entry_replace(sub_tree->node, sub_tree->tree_left->node->key, sub_tree->tree_left->node->value);
-		//print_tree(tree);
-		//printf("\n");
 		tree_del(sub_tree->tree_left, sub_tree->tree_left->node->key);
 		
 	}else if(sub_tree->tree_right){
 		printf("right\n");
-		entry_destroy(sub_tree->node);
-		sub_tree->node = entry_dup(sub_tree->tree_right->node);
+		entry_replace(sub_tree->node, sub_tree->tree_right->node->key, sub_tree->tree_right->node->value);
 		tree_del(sub_tree->tree_right, sub_tree->tree_right->node->key);
 	}
 	
-
 	return 0;
 }
 

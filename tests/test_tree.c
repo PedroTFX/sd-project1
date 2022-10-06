@@ -207,7 +207,7 @@ int testGetKeys() {
 	int result = 1,i,j,achou;
 	struct tree_t *tree = tree_create();
 	char **keys;
-	char *k[7] = {"4","2","6","1","3","5","7",};
+	char *k[7] = {"4","2","6","1","5","7","3"};
 	struct data_t *d = data_create(5);
 
 	for(int i = 0; i < 7;i++){
@@ -215,10 +215,7 @@ int testGetKeys() {
 	}
 	
 	print_tree(tree);
-	tree_del(tree, "2");
-	print_tree(tree);
-	tree_del(tree, "3");
-	print_tree(tree);
+	tree_del(tree, "6");
 	printf("size: %d\n", tree_size(tree));
 	data_destroy(d);
 	
@@ -229,7 +226,7 @@ int testGetKeys() {
 	
 	for(i=0; keys[i] != NULL; i++) {
 		achou = 0;
-		for(j=0; j<3; j++) {
+		for(j=0; j<7; j++) {
 			achou = (achou || (strcmp(keys[i],k[j]) == 0));
 		}
 		result = (result && achou);

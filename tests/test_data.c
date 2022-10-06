@@ -192,7 +192,7 @@ int testReplace(){
 
 	result = result &&
 		 ((strcmp(data->data, data_s2) == 0) && (data->datasize == data_size2));
-
+	
 	data_destroy(data);
 
 	printf("data - testCreate2: %s\n",result?"passou":"não passou");
