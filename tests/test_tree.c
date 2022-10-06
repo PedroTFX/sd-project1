@@ -213,15 +213,15 @@ int testGetKeys() {
 	for(int i = 0; i < 7;i++){
 		tree_put(tree, k[i], d);
 	}
-	print_tree(tree);
-	tree_del(tree, "2");
+	/*
 	print_tree(tree);
 	tree_del(tree, "3");
+	tree_del(tree, "2");
 	print_tree(tree);
 	printf("size: %d\n", tree_size(tree));
 	data_destroy(d);
+	*/
 	keys = tree_get_keys(tree);
-
 	for(int i = 0; keys[i];i++){
 		printf("key: %s\n",keys[i]);
 	}

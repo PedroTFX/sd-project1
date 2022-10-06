@@ -193,12 +193,9 @@ int tree_del(struct tree_t *tree, char *key){
 	printf("tree_size i: %d\n", tree_size(sub_tree));
 	printf("boom: %d\n",sub_tree->tree_left && sub_tree->tree_right );
 	if(tree_size(sub_tree) == 1){ //works				//if the PD is a leaf 
-		printf("leaf\n");
+		printf("---leaf---\n");
 		tree_destroy(sub_tree);							//destroy link
 		memset(sub_tree, 0, (sizeof(struct tree_t)));	//reclaim mem
-		printf("tree size: %d\n",tree_size(tree));
-		printf("boom: %d\n",sub_tree->tree_left || sub_tree->tree_right );
-
 		return 0;
 
 	}else if(sub_tree->tree_left && sub_tree->tree_right){		//if the PD is not a leaf and has two trees duplicate the next biggest value(tree_right)
@@ -269,17 +266,17 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 	if(tree->tree_left){
 		index = tree_get_keys_aux(tree->tree_left, keyPtrs, index);
 	}
-
+	
 	keyPtrs[index] = malloc(strlen(tree->node->key) * sizeof(char));
 	if(!keyPtrs[index]){ // error on init
 		return -1;
 	}
 	strcpy(keyPtrs[index], tree->node->key);
+	printf("key: %s index: %d\n", keyPtrs[index], index);
 		index++;
 
 	if(tree->tree_right){
-		index += tree_get_keys_aux(tree->tree_right, keyPtrs, index);
-		index++;
+		index = tree_get_keys_aux(tree->tree_right, keyPtrs, index);
 	}
 	
 	return index;
