@@ -34,7 +34,6 @@ void tree_destroy(struct tree_t *tree){
 		if(tree->tree_right){
 			tree_destroy(tree->tree_right);
 		}
-
 		free(tree);
 	}
 
@@ -138,7 +137,7 @@ struct tree_t* tree_dup(struct tree_t* tree){
 	
 	if(tree){
 		if(tree->node){
-			tree_st->node = tree->node;
+			tree_st->node = entry_dup(tree->node);
 		}
 		if(tree->tree_left){
 			tree_st->tree_left = tree_dup(tree->tree_left);
@@ -149,20 +148,13 @@ struct tree_t* tree_dup(struct tree_t* tree){
 	}
 	return tree_st;
 }
-//pointers not freed
-void tree_put_tree(struct tree_t* treeOG, struct tree_t* treeGone){
-	if(treeGone){
-		if(treeGone->node){
-			tree_put(treeOG, treeGone->node->key, treeGone->node->value);
-		}
-		if(treeGone->tree_left){
-			tree_put_tree(treeOG, treeGone->tree_left);
-		}
-		if(treeGone->tree_right){
-			tree_put_tree(treeOG, treeGone->tree_right);
-		}
-	}
+
+void tree_replace(struct tree_t* dest, struct tree_t* src){
+	struct tree_t* temp = tree_dup(src);
+	tree_destroy(dest);
+	dest = temp;
 }
+
 
 /* Função para remover um elemento da árvore, indicado pela chave key,
  * libertando toda a memória alocada na respetiva operação tree_put.
@@ -174,22 +166,29 @@ int tree_del(struct tree_t *tree, char *key){
 	if(!sub_tree){
 		return -1;
 	}
-
+	printf("key: %s\n", sub_tree->node->key);
 	//pretended delete : PD
-	if(tree_size(sub_tree) == 1){	//if the PD is a leaf find and delete
-		sub_tree->node = NULL;
-		entry_destroy(sub_tree->node);
+	printf("tree_size i: %d\n", tree_size(sub_tree));
+	if(tree_size(sub_tree) == 1){ //works				//if the PD is a leaf 
+		printf("leaf\n");
+		tree_destroy(sub_tree);							//destroy link
+		memset(sub_tree, 0, (sizeof(struct tree_t)));	//reclaim mem
+
 	}else if(sub_tree->tree_left && sub_tree->tree_right){		//if the PD is not a leaf and has two trees duplicate the next biggest value(tree_right)
-		sub_tree->node = NULL;									//repeat the proccess till it finds a tree that doesnt have two trees
-		tree->node = entry_dup(sub_tree->tree_right->node);		// if the PD only has 1 tree unlink the node and link to next node
-		tree_del(sub_tree->tree_right, sub_tree->tree_right->node->key);
-
+		
 	}else if(sub_tree->tree_left){
-		tree = sub_tree->tree_left;
-
+		printf("left\n");
+		entry_destroy(sub_tree->node);
+		sub_tree->node = entry_dup(sub_tree->tree_left->node);
+		tree_del(sub_tree->tree_left, sub_tree->tree_left->node->key);
+		
 	}else if(sub_tree->tree_right){
-		tree = sub_tree->tree_right;
+		printf("right\n");
+		entry_destroy(sub_tree->node);
+		sub_tree->node = entry_dup(sub_tree->tree_right->node);
+		tree_del(sub_tree->tree_right, sub_tree->tree_right->node->key);
 	}
+	
 
 	return 0;
 }
