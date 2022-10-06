@@ -155,6 +155,28 @@ void tree_replace(struct tree_t* dest, struct tree_t* src){
 	dest = temp;
 }
 
+struct entry_t* min(struct tree_t* tree){
+	struct tree_t* temp = tree;
+	while(temp->tree_left){
+		temp = temp->tree_left;
+	}
+	return entry_dup(temp->node);
+}
+
+void print_tree(struct tree_t* tree){
+	if(tree->tree_left){
+		print_tree(tree->tree_left);
+	}
+	if(tree->node){
+		printf("%s\n", tree->node->key);
+	}
+	
+	if(tree->tree_right){
+		print_tree(tree->tree_right);
+	}
+
+}
+
 
 /* Função para remover um elemento da árvore, indicado pela chave key,
  * libertando toda a memória alocada na respetiva operação tree_put.
@@ -166,20 +188,35 @@ int tree_del(struct tree_t *tree, char *key){
 	if(!sub_tree){
 		return -1;
 	}
-	printf("key: %s\n", sub_tree->node->key);
+	printf("key del: %s\n", sub_tree->node->key);
 	//pretended delete : PD
 	printf("tree_size i: %d\n", tree_size(sub_tree));
+	printf("boom: %d\n",sub_tree->tree_left && sub_tree->tree_right );
 	if(tree_size(sub_tree) == 1){ //works				//if the PD is a leaf 
 		printf("leaf\n");
 		tree_destroy(sub_tree);							//destroy link
 		memset(sub_tree, 0, (sizeof(struct tree_t)));	//reclaim mem
+		printf("tree size: %d\n",tree_size(tree));
+		printf("boom: %d\n",sub_tree->tree_left || sub_tree->tree_right );
+
+		return 0;
 
 	}else if(sub_tree->tree_left && sub_tree->tree_right){		//if the PD is not a leaf and has two trees duplicate the next biggest value(tree_right)
+		struct entry_t* tree_min = min(sub_tree->tree_right);
+		printf("min key: %s\n", tree_min->key);
+		sub_tree->node = entry_dup(tree_min);
+		print_tree(tree);
+		printf("\n");
+		tree_del(sub_tree->tree_right, tree_min->key);
 		
 	}else if(sub_tree->tree_left){
 		printf("left\n");
 		entry_destroy(sub_tree->node);
-		sub_tree->node = entry_dup(sub_tree->tree_left->node);
+		struct tree_t* temp = tree_dup(sub_tree->tree_left);
+		tree_destroy(sub_tree->tree_left);
+		sub_tree = temp;
+		
+		
 		tree_del(sub_tree->tree_left, sub_tree->tree_left->node->key);
 		
 	}else if(sub_tree->tree_right){
@@ -241,7 +278,7 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 		index++;
 
 	if(tree->tree_right){
-		tree_get_keys_aux(tree->tree_right, keyPtrs, index);
+		index += tree_get_keys_aux(tree->tree_right, keyPtrs, index);
 		index++;
 	}
 	
