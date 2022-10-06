@@ -168,7 +168,7 @@ void print_tree(struct tree_t* tree){
 		print_tree(tree->tree_left);
 	}
 	if(tree->node){
-		printf("%s\n", tree->node->key);
+		//printf("%s\n", tree->node->key);
 	}
 	
 	if(tree->tree_right){
@@ -191,29 +191,30 @@ int tree_del(struct tree_t *tree, char *key){
 	printf("key del: %s\n", sub_tree->node->key);
 	//pretended delete : PD
 	printf("tree_size i: %d\n", tree_size(sub_tree));
-	printf("boom: %d\n",sub_tree->tree_left && sub_tree->tree_right );
+	//printf("boom: %d\n",sub_tree->tree_left && sub_tree->tree_right );
 	if(tree_size(sub_tree) == 1){ //works				//if the PD is a leaf 
 		printf("---leaf---\n");
-		tree_destroy(sub_tree);							//destroy link
 		memset(sub_tree, 0, (sizeof(struct tree_t)));	//reclaim mem
+		//tree_destroy(sub_tree);
+		//sub_tree = NULL;
+		//printf("boom222: %d\n",sub_tree->tree_left && sub_tree->tree_right);
 		return 0;
 
 	}else if(sub_tree->tree_left && sub_tree->tree_right){		//if the PD is not a leaf and has two trees duplicate the next biggest value(tree_right)
 		struct entry_t* tree_min = min(sub_tree->tree_right);
 		printf("min key: %s\n", tree_min->key);
 		sub_tree->node = entry_dup(tree_min);
-		print_tree(tree);
+		entry_replace(sub_tree->node, tree_min->key, tree_min->value);
+		//print_tree(tree);
 		printf("\n");
 		tree_del(sub_tree->tree_right, tree_min->key);
+		//sub_tree->tree_right = NULL;
 		
 	}else if(sub_tree->tree_left){
 		printf("left\n");
-		entry_destroy(sub_tree->node);
-		struct tree_t* temp = tree_dup(sub_tree->tree_left);
-		tree_destroy(sub_tree->tree_left);
-		sub_tree = temp;
-		
-		
+		entry_replace(sub_tree->node, sub_tree->tree_left->node->key, sub_tree->tree_left->node->value);
+		//print_tree(tree);
+		//printf("\n");
 		tree_del(sub_tree->tree_left, sub_tree->tree_left->node->key);
 		
 	}else if(sub_tree->tree_right){
@@ -261,8 +262,6 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 	if (!tree || !tree->node){
 		return index;
 	}
-	//printf("key: %s index: %d\n", keyPtrs[index], index);
-
 	//a tree ja esta ordenada de forma lexicografica from TL to N to TR
 	if(tree->tree_left){
 		index = tree_get_keys_aux(tree->tree_left, keyPtrs, index);

@@ -215,7 +215,9 @@ int testGetKeys() {
 	}
 	
 	print_tree(tree);
-	//tree_del(tree, "3");
+	tree_del(tree, "2");
+	print_tree(tree);
+	tree_del(tree, "3");
 	print_tree(tree);
 	printf("size: %d\n", tree_size(tree));
 	data_destroy(d);
@@ -258,7 +260,7 @@ int main() {
 
 	score += testDelInexistente();
 
-	//score += testDelExistente();
+	score += testDelExistente();
 
 	score += testGetKeys();
 	
