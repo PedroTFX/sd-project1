@@ -36,15 +36,14 @@ void tree_destroy(struct tree_t *tree){
 		}
 		free(tree);
 	}
-
 }
 
 /**
  * @brief Find the tree object from given key
- * 
- * @param tree 
- * @param key 
- * @return struct entry_t* || NULL if not found 
+ *
+ * @param tree
+ * @param key
+ * @return struct entry_t* || NULL if not found
  */
 struct tree_t* get_tree(struct tree_t* tree, char* key){
 	struct entry_t* entry = malloc(sizeof(struct entry_t));
@@ -78,15 +77,15 @@ struct tree_t* get_tree(struct tree_t* tree, char* key){
  * a necessária gestão da memória para armazenar os novos dados.
  * Retorna 0 (ok) ou -1 em caso de erro.
  */
-int tree_put(struct tree_t *tree, char *key, struct data_t *value){
+int tree_put(struct tree_t *tree, char *key, struct data_t *value) {
 	struct tree_t* current_tree = tree;
 	struct entry_t* entry = malloc(sizeof(struct entry_t));
 	entry->key = strdup(key);
 	entry->value = data_dup(value);
-	
+
 	while(current_tree->node){
 		int comp = entry_compare(entry, current_tree->node);
-		
+
 		if(comp == -1){
 			if(!current_tree->tree_left){
 				current_tree->tree_left = tree_create();
@@ -102,7 +101,7 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value){
 			break;
 		}
 	}
-	
+
 	current_tree->node = entry_dup(entry);
 	entry_destroy(entry);
 	return 0;
@@ -134,7 +133,7 @@ int tree_size(struct tree_t *tree){
 //WORKS
 struct tree_t* tree_dup(struct tree_t* tree){
 	struct tree_t* tree_st = tree_create();
-	
+
 	if(tree){
 		if(tree->node){
 			tree_st->node = entry_dup(tree->node);
@@ -170,7 +169,7 @@ void print_tree(struct tree_t* tree){
 	if(tree->node){
 		printf("%s\n", tree->node->key);
 	}
-	
+
 	if(tree->tree_right){
 		print_tree(tree->tree_right);
 	}
@@ -189,7 +188,7 @@ int tree_del(struct tree_t *tree, char *key){
 		return -1;
 	}
 
-	if(tree_size(sub_tree) == 1){ //works				//if the PD is a leaf 
+	if(tree_size(sub_tree) == 1){ //works				//if the PD is a leaf
 		sub_tree->node = NULL;
 		sub_tree = NULL;
 		return 0;
@@ -201,12 +200,12 @@ int tree_del(struct tree_t *tree, char *key){
 	}else if(sub_tree->tree_left){
 		entry_replace(sub_tree->node, sub_tree->tree_left->node->key, sub_tree->tree_left->node->value);
 		tree_del(sub_tree->tree_left, sub_tree->tree_left->node->key);
-		
+
 	}else if(sub_tree->tree_right){
 		entry_replace(sub_tree->node, sub_tree->tree_right->node->key, sub_tree->tree_right->node->value);
 		tree_del(sub_tree->tree_right, sub_tree->tree_right->node->key);
 	}
-	
+
 	return 0;
 }
 
@@ -216,7 +215,7 @@ int tree_height(struct tree_t *tree){
 	if(tree == NULL){
 		return 0;
 	}
-	
+
 	int left = tree_height(tree->tree_left) + 1;
 	int right = tree_height(tree->tree_right) + 1;
 
@@ -227,8 +226,7 @@ int tree_height(struct tree_t *tree){
  * árvore, colocando o último elemento do array com o valor NULL e
  * reservando toda a memória necessária. As keys devem vir ordenadas segundo a ordenação lexicográfica das mesmas.
  */
-char **tree_get_keys(struct tree_t *tree)
-{
+char **tree_get_keys(struct tree_t *tree) {
 	int size = tree_size(tree) + 1;
 	char **keyPtrs = malloc(size * sizeof(char));
 	if(!keyPtrs){
@@ -248,7 +246,7 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 	if(tree->tree_left){
 		index = tree_get_keys_aux(tree->tree_left, keyPtrs, index);
 	}
-	
+
 	keyPtrs[index] = malloc(strlen(tree->node->key) * sizeof(char));
 	if(!keyPtrs[index]){ // error on init
 		return -1;
@@ -259,7 +257,7 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 	if(tree->tree_right){
 		index = tree_get_keys_aux(tree->tree_right, keyPtrs, index);
 	}
-	
+
 	return index;
 }
 
@@ -302,15 +300,15 @@ int tree_get_values_aux(struct tree_t *tree, struct data_t **valuePtrs, int inde
 		tree_get_values_aux(tree->tree_right, valuePtrs, index);
 		index++;
 	}
-	
+
 	return index;
 }
 
-void tree_free_keys(char **keys)
-{
+void tree_free_keys(char **keys) {
 	for (int i = 0; keys[i]; i++){
 		free(keys[i]);
 	}
+	free(keys);
 }
 
 /* Função que liberta toda a memória alocada por tree_get_values().
