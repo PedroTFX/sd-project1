@@ -1,6 +1,6 @@
 
 TARGET := example
-
+targete:= test_tree
 EXTENSION := cpp
 CC := gcc
 
@@ -49,7 +49,7 @@ clean:
 
 
 #setup directory
-setup: 
+setup:
 	mkdir -p $(OBJDIR)
 	mkdir -p $(BINDIR)
 	mkdir -p $(LIBDIR)
@@ -103,33 +103,45 @@ exec:
 
 #run valgrind
 valgrind:
-	valgrind --leak-check=full $(BINDIR)/$(TARGET)
+	valgrind --leak-check=full --track-origins=yes $(BINDIR)/$(targete)
 
 
 #get todo list
 todo:
 	@grep -R TODO -n | tr -s ' ' | grep -v makefile
 
-test_data:
-	$(CC) $(DEBUGFLAGS) -o obj/data.o -c src/data.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_data.c -o bin/test_data obj/data.o -I $(INCLUDEDIR)
+data:
+	$(CC) $(DEBUGFLAGS) -o obj/data.o -c src/data.c -I $(INCLUDEDIR)
+
+entry:
+	$(CC) $(DEBUGFLAGS) -o obj/entry.o -c src/entry.c -I $(INCLUDEDIR)
+
+tree:
+	$(CC) $(DEBUGFLAGS) -o obj/tree.o -c src/tree.c -I $(INCLUDEDIR)
+
+serialization:
+	$(CC) $(DEBUGFLAGS) -o obj/serialization.o -c src/serialization.c -I $(INCLUDEDIR)
+
+test_data: data
+	$(CC) $(DEBUGFLAGS) tests/test_data.c -o bin/test_data obj/data.o -I $(INCLUDEDIR)
+
+test_entry: data entry
+	$(CC) $(DEBUGFLAGS) tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -I $(INCLUDEDIR)
+
+test_tree: data entry tree
+	$(CC) $(DEBUGFLAGS) tests/test_tree.c -o bin/test_tree obj/data.o obj/entry.o obj/tree.o -I $(INCLUDEDIR)
+
+test_serial: data entry tree serialization
+	$(CC) $(DEBUGFLAGS) tests/test_serialization.c -o bin/test_serialization obj/data.o obj/entry.o obj/tree.o obj/serialization.o -I $(INCLUDEDIR)
 
 test_data_run: test_data
 	./bin/test_data
 
-test_entry: test_data_run
-	$(CC) $(DEBUGFLAGS) -o obj/entry.o -c src/entry.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -I $(INCLUDEDIR)
-
 test_entry_run: test_entry
 	./bin/test_entry
 
-test_tree: test_entry_run
-	$(CC) $(DEBUGFLAGS) -o obj/tree.o -c src/tree.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_tree.c -o bin/test_tree obj/data.o obj/entry.o obj/tree.o -I $(INCLUDEDIR)
-
 test_tree_run: test_tree
 	./bin/test_tree
-
-test_serial: test_tree
-	$(CC) $(DEBUGFLAGS) -o obj/serialization.o -c src/serialization.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_serialization.c -o bin/test_serialization obj/data.o obj/entry.o obj/tree.o obj/serialization.o -I $(INCLUDEDIR)
 
 test_serial_run: test_serial
 	./bin/test_serialization
