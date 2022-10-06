@@ -54,18 +54,18 @@ struct tree_t* get_tree(struct tree_t* tree, char* key){
 
 	while(current_tree->node != NULL){
 		int comp = entry_compare(entry, current_tree->node);
-		entry_destroy(entry);
-
 		if(comp == 0){	//found
+			entry_destroy(entry);
 			return current_tree;
 		}else if(comp == -1 && current_tree->tree_left){
-			return get_tree(current_tree->tree_left, key);
+			current_tree = current_tree->tree_left;
 		}else if(comp == 1 && current_tree->tree_right){
-			return get_tree(current_tree->tree_right, key);
+			current_tree = current_tree->tree_right;
 		}else{			//not found
-			return NULL;
+			break;
 		}
 	}
+	entry_destroy(entry);
 	return NULL;
 
 }
@@ -160,7 +160,7 @@ struct entry_t* min(struct tree_t* tree){
 	while(temp->tree_left){
 		temp = temp->tree_left;
 	}
-	return entry_dup(temp->node);
+	return temp->node;
 }
 
 void print_tree(struct tree_t* tree){
@@ -320,5 +320,4 @@ void tree_free_values(void **values) {
 	for (int i = 0; values[i] != NULL; i++) {
 		data_destroy(values[i]);
 	}
-	free(values);
 }
