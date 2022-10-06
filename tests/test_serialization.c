@@ -11,8 +11,7 @@
 #include "serialization.h"
 #include "serialization-private.h"
 
-int main(int argc, char const *argv[])
-{
+int testSerialization(){
 	int result = 1;
 	struct tree_t *tree = tree_create();
 
@@ -41,6 +40,18 @@ int main(int argc, char const *argv[])
 	}
 
 	printf("tree - test_Serialization: %s\n", result ? "passou" : "não passou");
+	return result;
+}
+
+int main(int argc, char const *argv[])
+{
+	int score = 0;
+
+	printf("iniciando o teste serialization bin\n");
+
+	score += testSerialization();
+
+	printf("teste serialization bin: %d/1\n",score);
 
 	return 0;
 }

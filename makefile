@@ -128,7 +128,7 @@ test_tree: test_entry_run
 test_tree_run: test_tree
 	./bin/test_tree
 
-test_serial: test_tree
+test_serial: test_tree_run
 	$(CC) $(DEBUGFLAGS) -o obj/serialization.o -c src/serialization.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_serialization.c -o bin/test_serialization obj/data.o obj/entry.o obj/tree.o obj/serialization.o -I $(INCLUDEDIR)
 
 test_serial_run: test_serial
