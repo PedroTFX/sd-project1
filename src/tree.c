@@ -259,8 +259,9 @@ char **tree_get_keys(struct tree_t *tree)
 
 int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 	if (!tree || !tree->node){
-		return -1;
+		return index;
 	}
+	//printf("key: %s index: %d\n", keyPtrs[index], index);
 
 	//a tree ja esta ordenada de forma lexicografica from TL to N to TR
 	if(tree->tree_left){
@@ -272,7 +273,6 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 		return -1;
 	}
 	strcpy(keyPtrs[index], tree->node->key);
-	printf("key: %s index: %d\n", keyPtrs[index], index);
 		index++;
 
 	if(tree->tree_right){
