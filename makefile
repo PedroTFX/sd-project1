@@ -6,8 +6,8 @@ CC := gcc
 
 INCLUDEDIR := include
 OBJDIR := obj
-SRCDIR := src
-BINDIR := bin
+SRCDIR := source
+BINDIR := binary
 LIBDIR := lib
 ASMDIR := asm
 
@@ -111,26 +111,26 @@ todo:
 	@grep -R TODO -n | tr -s ' ' | grep -v makefile
 
 test_data:
-	$(CC) $(DEBUGFLAGS) -o obj/data.o -c src/data.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_data.c -o bin/test_data obj/data.o -I $(INCLUDEDIR)
+	$(CC) $(DEBUGFLAGS) -o obj/data.o -c source/data.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) source/test_data.c -o binary/test_data obj/data.o -I $(INCLUDEDIR)
 
 test_data_run: test_data
-	./bin/test_data
+	./binary/test_data
 
 test_entry: test_data_run
-	$(CC) $(DEBUGFLAGS) -o obj/entry.o -c src/entry.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -I $(INCLUDEDIR)
+	$(CC) $(DEBUGFLAGS) -o obj/entry.o -c source/entry.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) source/test_entry.c -o binary/test_entry obj/data.o obj/entry.o -I $(INCLUDEDIR)
 
 test_entry_run: test_entry
-	./bin/test_entry
+	./binary/test_entry
 
 test_tree: test_entry_run
-	$(CC) $(DEBUGFLAGS) -o obj/tree.o -c src/tree.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_tree.c -o bin/test_tree obj/data.o obj/entry.o obj/tree.o -I $(INCLUDEDIR)
+	$(CC) $(DEBUGFLAGS) -o obj/tree.o -c source/tree.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) source/test_tree.c -o binary/test_tree obj/data.o obj/entry.o obj/tree.o -I $(INCLUDEDIR)
 
 test_tree_run: test_tree
-	./bin/test_tree
+	./binary/test_tree
 
 test_serial: test_tree_run
-	$(CC) $(DEBUGFLAGS) -o obj/serialization.o -c src/serialization.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) tests/test_serialization.c -o bin/test_serialization obj/data.o obj/entry.o obj/tree.o obj/serialization.o -I $(INCLUDEDIR)
+	$(CC) $(DEBUGFLAGS) -o obj/serialization.o -c source/serialization.c -I $(INCLUDEDIR) && $(CC) $(DEBUGFLAGS) source/test_serialization.c -o binary/test_serialization obj/data.o obj/entry.o obj/tree.o obj/serialization.o -I $(INCLUDEDIR)
 
 test_serial_run: test_serial
-	./bin/test_serialization
+	./binary/test_serialization
 
