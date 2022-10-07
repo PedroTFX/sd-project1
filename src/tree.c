@@ -10,10 +10,9 @@
 /* Função para criar uma nova árvore tree vazia.
  * Em caso de erro retorna NULL.
  */
-struct tree_t* tree_create(){
-	struct tree_t* tree = malloc(sizeof(struct tree_t));
+struct tree_t* tree_create() {
+	struct tree_t* tree = (struct tree_t*) malloc(sizeof(struct tree_t));
 	if(tree == NULL){
-		tree = NULL;
 		return NULL;
 	}
 	memset(tree, 0, sizeof(struct tree_t));
@@ -46,27 +45,23 @@ void tree_destroy(struct tree_t *tree){
  * @return struct entry_t* || NULL if not found
  */
 struct tree_t* get_tree(struct tree_t* tree, char* key){
-	struct entry_t* entry = malloc(sizeof(struct entry_t));
-	entry->key = strdup(key);
-
-	struct tree_t* current_tree = tree;
-
-	while(current_tree->node != NULL){
-		int comp = entry_compare(entry, current_tree->node);
-		if(comp == 0){	//found
-			entry_destroy(entry);
-			return current_tree;
-		}else if(comp == -1 && current_tree->tree_left){
-			current_tree = current_tree->tree_left;
-		}else if(comp == 1 && current_tree->tree_right){
-			current_tree = current_tree->tree_right;
-		}else{			//not found
-			break;
+	while(tree->node != NULL) {
+		int cmp = strcmp(key, tree->node->key);
+		if(cmp < 0) {
+			if(tree->tree_left == NULL) {
+				break;
+			}
+			tree = tree->tree_left;
+		} else if(cmp > 0) {
+			if(tree->tree_right == NULL) {
+				break;
+			}
+			tree = tree->tree_right;
+		} else {
+			return tree;
 		}
 	}
-	entry_destroy(entry);
 	return NULL;
-
 }
 
 /* Função para adicionar um par chave-valor à árvore.
@@ -78,32 +73,29 @@ struct tree_t* get_tree(struct tree_t* tree, char* key){
  * Retorna 0 (ok) ou -1 em caso de erro.
  */
 int tree_put(struct tree_t *tree, char *key, struct data_t *value) {
-	struct tree_t* current_tree = tree;
-	struct entry_t* entry = malloc(sizeof(struct entry_t));
-	entry->key = strdup(key);
-	entry->value = data_dup(value);
-
-	while(current_tree->node){
-		int comp = entry_compare(entry, current_tree->node);
-
-		if(comp == -1){
-			if(!current_tree->tree_left){
-				current_tree->tree_left = tree_create();
-			}
-			current_tree = current_tree->tree_left;
-		}else if(comp == 1){
-			if(!current_tree->tree_right){
-				current_tree->tree_right = tree_create();
-			}
-			current_tree = current_tree->tree_right;
-		}else{				//replace
-			entry_destroy(current_tree->node);		//clean bef put
-			break;
-		}
+	if(tree->node == NULL) {
+		struct entry_t* entry = entry_create(key, value);
+		tree->node = entry_dup(entry);
+		free(entry);
+		return 0;
 	}
 
-	current_tree->node = entry_dup(entry);
-	entry_destroy(entry);
+	int cmp = strcmp(key, tree->node->key);
+	if(cmp < 0) {
+		if(tree->tree_left == NULL) {
+			tree->tree_left = tree_create();
+		}
+		return tree_put(tree->tree_left, key, value);
+	} else if(cmp > 0) {
+		if(tree->tree_right == NULL) {
+			tree->tree_right = tree_create();
+		}
+		return tree_put(tree->tree_right, key, value);
+	} else if(cmp == 0) {
+		entry_destroy(tree->node);
+		tree->node = NULL;
+		return tree_put(tree, key, value);
+	}
 	return 0;
 }
 
@@ -118,22 +110,17 @@ int tree_put(struct tree_t *tree, char *key, struct data_t *value) {
  */
 struct data_t* tree_get(struct tree_t *tree, char *key){
 	struct tree_t* tree_st = get_tree(tree, key);
-	return (tree_st) ? data_dup(tree_st->node->value) : NULL ;
+	return tree_st ? data_dup(tree_st->node->value) : NULL;
 }
 
-/* Função que devolve o número de elementos contidos na árvore.
- */
+/* Função que devolve o número de elementos contidos na árvore. */
 int tree_size(struct tree_t *tree){
-	if(tree == NULL){
-		return 0;
-	}
-	return tree_size(tree->tree_left) + tree_size(tree->tree_right) + (tree->node != NULL);
+	return tree == NULL ? 0 : (tree->node != NULL) + tree_size(tree->tree_left) + tree_size(tree->tree_right);
 }
 
-//WORKS
+
 struct tree_t* tree_dup(struct tree_t* tree){
 	struct tree_t* tree_st = tree_create();
-
 	if(tree){
 		if(tree->node){
 			tree_st->node = entry_dup(tree->node);
@@ -156,7 +143,7 @@ void tree_replace(struct tree_t* dest, struct tree_t* src){
 
 struct entry_t* min(struct tree_t* tree){
 	struct tree_t* temp = tree;
-	while(temp->tree_left){
+	while(temp->tree_left) {
 		temp = temp->tree_left;
 	}
 	return temp->node;
@@ -175,7 +162,6 @@ void print_tree(struct tree_t* tree){
 	}
 
 }
-
 
 /* Função para remover um elemento da árvore, indicado pela chave key,
  * libertando toda a memória alocada na respetiva operação tree_put.
@@ -228,7 +214,7 @@ int tree_height(struct tree_t *tree){
  */
 char **tree_get_keys(struct tree_t *tree) {
 	int size = tree_size(tree) + 1;
-	char **keyPtrs = malloc(size * sizeof(char));
+	char **keyPtrs = malloc(size * sizeof(char*));
 	if(!keyPtrs){
 		return NULL;
 	}
