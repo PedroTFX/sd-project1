@@ -5,7 +5,38 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
-			"name": "Debug",
+			"name": "Debug data",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/bin/test_data",
+			"args": [
+			],
+			"stopAtEntry": false,
+			"cwd": "${fileDirname}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"preLaunchTask": "Compile data",
+			"setupCommands": [
+				{
+					"description": "Enable funcy printing to gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				},
+				{
+					"description": "In this mode GDB will be attached to both processes after a call to fork() or vfork().",
+					"text": "-gdb-set detach-on-fork on",
+					"ignoreFailures": false
+				},
+				{
+					"description": "The new process is debugged after a fork. The parent process runs unimpeded.",
+					"text": "-gdb-set follow-fork-mode child",
+					"ignoreFailures": false
+				}
+			]
+		},
+		{
+			"name": "Debug entry",
 			"type": "cppdbg",
 			"request": "launch",
 			"program": "${workspaceFolder}/bin/test_entry",
@@ -16,9 +47,69 @@
 			"environment": [],
 			"externalConsole": false,
 			"MIMode": "gdb",
-			//"miDebuggerPath": "C:\\MinGW\\bin\\gdb.exe",
-			//"miDebuggerPath": "/usr/bin/gdb",
-			"preLaunchTask": "Compile",
+			"preLaunchTask": "Compile entry",
+			"setupCommands": [
+				{
+					"description": "Enable funcy printing to gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				},
+				{
+					"description": "In this mode GDB will be attached to both processes after a call to fork() or vfork().",
+					"text": "-gdb-set detach-on-fork on",
+					"ignoreFailures": false
+				},
+				{
+					"description": "The new process is debugged after a fork. The parent process runs unimpeded.",
+					"text": "-gdb-set follow-fork-mode child",
+					"ignoreFailures": false
+				}
+			]
+		},
+		{
+			"name": "Debug tree",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/bin/test_tree",
+			"args": [
+			],
+			"stopAtEntry": false,
+			"cwd": "${fileDirname}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"preLaunchTask": "Compile tree",
+			"setupCommands": [
+				{
+					"description": "Enable funcy printing to gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				},
+				{
+					"description": "In this mode GDB will be attached to both processes after a call to fork() or vfork().",
+					"text": "-gdb-set detach-on-fork on",
+					"ignoreFailures": false
+				},
+				{
+					"description": "The new process is debugged after a fork. The parent process runs unimpeded.",
+					"text": "-gdb-set follow-fork-mode child",
+					"ignoreFailures": false
+				}
+			]
+		},
+		{
+			"name": "Debug serial",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/bin/test_serialization",
+			"args": [
+			],
+			"stopAtEntry": false,
+			"cwd": "${fileDirname}",
+			"environment": [],
+			"externalConsole": false,
+			"MIMode": "gdb",
+			"preLaunchTask": "Compile serial",
 			"setupCommands": [
 				{
 					"description": "Enable funcy printing to gdb",
