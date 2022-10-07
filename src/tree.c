@@ -46,8 +46,8 @@ void tree_destroy(struct tree_t *tree){
  * @return struct entry_t* || NULL if not found
  */
 struct tree_t* get_tree(struct tree_t* tree, char* key){
-	struct entry_t* entry = malloc(sizeof(struct entry_t));
-	entry->key = strdup(key);
+	struct data_t* data = data_create(1);
+	struct entry_t* entry = entry_create(strdup(key), data);
 
 	struct tree_t* current_tree = tree;
 
@@ -79,9 +79,7 @@ struct tree_t* get_tree(struct tree_t* tree, char* key){
  */
 int tree_put(struct tree_t *tree, char *key, struct data_t *value) {
 	struct tree_t* current_tree = tree;
-	struct entry_t* entry = malloc(sizeof(struct entry_t));
-	entry->key = strdup(key);
-	entry->value = data_dup(value);
+	struct entry_t* entry = entry_create(strdup(key), data_dup(value));
 
 	while(current_tree->node){
 		int comp = entry_compare(entry, current_tree->node);
@@ -189,8 +187,9 @@ int tree_del(struct tree_t *tree, char *key){
 	}
 
 	if(tree_size(sub_tree) == 1){ //works				//if the PD is a leaf
-		sub_tree->node = NULL;
-		sub_tree = NULL;
+		entry_destroy(sub_tree->node);
+        sub_tree->node = NULL;
+        sub_tree = NULL;
 		return 0;
 
 	}else if(sub_tree->tree_left && sub_tree->tree_right){		//if the PD is not a leaf and has two trees duplicate the next biggest value(tree_right)
@@ -228,7 +227,7 @@ int tree_height(struct tree_t *tree){
  */
 char **tree_get_keys(struct tree_t *tree) {
 	int size = tree_size(tree) + 1;
-	char **keyPtrs = malloc(size * sizeof(char));
+	char **keyPtrs = malloc(size * sizeof(char *));
 	if(!keyPtrs){
 		return NULL;
 	}
@@ -247,13 +246,9 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 		index = tree_get_keys_aux(tree->tree_left, keyPtrs, index);
 	}
 
-	keyPtrs[index] = malloc(strlen(tree->node->key) * sizeof(char));
-	if(!keyPtrs[index]){ // error on init
-		return -1;
-	}
-	strcpy(keyPtrs[index], tree->node->key);
+	keyPtrs[index] = strdup(tree->node->key);
 		index++;
-
+		
 	if(tree->tree_right){
 		index = tree_get_keys_aux(tree->tree_right, keyPtrs, index);
 	}
@@ -268,7 +263,7 @@ int tree_get_keys_aux(struct tree_t *tree, char **keyPtrs, int index) {
 void ** tree_get_values(struct tree_t *tree) {
 
 	int size = tree_size(tree) + 1;
-	struct data_t **valuePtrs = malloc(size * sizeof(struct data_t));
+	struct data_t **valuePtrs = malloc(size * sizeof(struct data_t*));
   	if(!valuePtrs){
 		return NULL;
 	}
@@ -281,26 +276,20 @@ void ** tree_get_values(struct tree_t *tree) {
 
 int tree_get_values_aux(struct tree_t *tree, struct data_t **valuePtrs, int index) {
 	if (!tree || !tree->node){
-		return -1;
+		return index;
 	}
-
 	//a tree ja esta ordenada de forma lexicografica from TL to N to TR
 	if(tree->tree_left){
 		index = tree_get_values_aux(tree->tree_left, valuePtrs, index);
 	}
 
-	valuePtrs[index] = malloc(sizeof(struct data_t));
-	if(!valuePtrs[index]){ // error on init
-		return -1;
-	}
 	valuePtrs[index] = data_dup(tree->node->value);
 		index++;
-
+		
 	if(tree->tree_right){
-		tree_get_values_aux(tree->tree_right, valuePtrs, index);
-		index++;
+		index = tree_get_values_aux(tree->tree_right, valuePtrs, index);
 	}
-
+	
 	return index;
 }
 
