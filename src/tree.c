@@ -6,7 +6,6 @@
 #include <tree-private.h>
 #include <string.h>
 #include <stdio.h>
-//#include <crtdbg.h>
 
 /* Função para criar uma nova árvore tree vazia.
  * Em caso de erro retorna NULL.
@@ -179,7 +178,9 @@ int tree_del(struct tree_t *tree, char *key){
 
 	if(tree_size(sub_tree) == 1){ //works				//if the PD is a leaf
 		sub_tree->node = NULL;
+		entry_destroy(sub_tree->node);
 		sub_tree = NULL;
+		//tree_destroy(sub_tree);
 		return 0;
 
 	}else if(sub_tree->tree_left && sub_tree->tree_right){		//if the PD is not a leaf and has two trees duplicate the next biggest value(tree_right)

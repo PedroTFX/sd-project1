@@ -242,17 +242,18 @@ int main() {
 
 	printf("iniciando teste tree bin\n");
 
-	score += testTreeVazia();
 
-	score += testPutInexistente();
+	 score += testTreeVazia();
 
-	score += testPutExistente();
+	 score += testPutInexistente();
 
-	score += testDelInexistente();
+	 score += testPutExistente();
 
-	score += testDelExistente();
+	 score += testDelInexistente();
 
-	score += testGetKeys();
+	 score += testDelExistente();
+
+	 score += testGetKeys();
 
 	//aqui tmb pode ser adicionado um teste para o método tree_get_values
 
