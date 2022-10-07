@@ -1,13 +1,17 @@
 # sd-project1
 
-## Tests
+How to run all tests project:
 
-Todos os testes passam: `make test_all`
+ - make clean
+ - make setup
+ - make test_serial_run
 
-## Memory Leaks
+How to run Valgrind:
 
-Só sobra um memory leak no tree_del(). Suspeita-se que falte libertar o nó que substitui o apagado (depois de copiado para o nó que é suposto apagar).
-
-## Notas
-
-Não houve alterações na serialização.
+ - make clean(if not done yet)
+ - make setup(if not done yet)
+ - make test_serial_run
+ - valgrind --leak-check=full bin/test_data
+ - valgrind --leak-check=full bin/test_entry
+ - valgrind --leak-check=full bin/test_tree
+ - valgrind --leak-check=full bin/test_serialization
