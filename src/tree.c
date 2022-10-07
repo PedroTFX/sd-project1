@@ -48,7 +48,6 @@ void tree_destroy(struct tree_t *tree){
 struct tree_t* get_tree(struct tree_t* tree, char* key){
 	struct data_t* data = data_create(1);
 	struct entry_t* entry = entry_create(strdup(key), data);
-
 	struct tree_t* current_tree = tree;
 
 	while(current_tree->node != NULL){
