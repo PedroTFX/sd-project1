@@ -6,16 +6,17 @@
 #include <tree-private.h>
 #include <string.h>
 #include <stdio.h>
+//#include <crtdbg.h>
 
 /* Função para criar uma nova árvore tree vazia.
  * Em caso de erro retorna NULL.
  */
 struct tree_t* tree_create() {
-	struct tree_t* tree = (struct tree_t*) malloc(sizeof(struct tree_t));
+	struct tree_t* tree = calloc(1,sizeof(struct tree_t));
 	if(tree == NULL){
 		return NULL;
 	}
-	memset(tree, 0, sizeof(struct tree_t));
+	//memset(tree, 0, sizeof(struct tree_t));
 	return tree;
 }
 
@@ -73,29 +74,31 @@ struct tree_t* get_tree(struct tree_t* tree, char* key){
  * Retorna 0 (ok) ou -1 em caso de erro.
  */
 int tree_put(struct tree_t *tree, char *key, struct data_t *value) {
-	if(tree->node == NULL) {
-		struct entry_t* entry = entry_create(key, value);
-		tree->node = entry_dup(entry);
-		free(entry);
-		return 0;
+	struct tree_t* current_tree = tree;
+	char* k = strdup(key);
+	struct data_t* data = data_dup(value);
+	struct entry_t* entry = entry_create(k, data);
+
+	while(current_tree->node){
+		int comp = entry_compare(entry, current_tree->node);
+
+		if(comp == -1){
+			if(!current_tree->tree_left){
+				current_tree->tree_left = tree_create();
+			}
+			current_tree = current_tree->tree_left;
+		}else if(comp == 1){
+			if(!current_tree->tree_right){
+				current_tree->tree_right = tree_create();
+			}
+			current_tree = current_tree->tree_right;
+		}else{				//replace
+			entry_destroy(current_tree->node);		//clean bef put
+			break;
+		}
 	}
 
-	int cmp = strcmp(key, tree->node->key);
-	if(cmp < 0) {
-		if(tree->tree_left == NULL) {
-			tree->tree_left = tree_create();
-		}
-		return tree_put(tree->tree_left, key, value);
-	} else if(cmp > 0) {
-		if(tree->tree_right == NULL) {
-			tree->tree_right = tree_create();
-		}
-		return tree_put(tree->tree_right, key, value);
-	} else if(cmp == 0) {
-		entry_destroy(tree->node);
-		tree->node = NULL;
-		return tree_put(tree, key, value);
-	}
+	current_tree->node = entry;
 	return 0;
 }
 
