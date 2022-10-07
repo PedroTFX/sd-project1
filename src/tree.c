@@ -309,4 +309,6 @@ void tree_free_values(void **values) {
 	for (int i = 0; values[i] != NULL; i++) {
 		data_destroy(values[i]);
 	}
+	free(values);
+	values = NULL;
 }
