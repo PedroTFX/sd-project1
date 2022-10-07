@@ -40,8 +40,10 @@ void entry_destroy(struct entry_t *entry) {
 		}
 		if(entry->key){
 			free(entry->key);
+			entry->key = NULL;
 		}
 		free(entry);
+		entry = NULL;
 	}
 }
 

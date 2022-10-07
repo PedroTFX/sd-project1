@@ -58,8 +58,10 @@ void data_destroy(struct data_t *data) {
 	if(data){
 		if(data->data) {
 			free(data->data);
+			data->data = NULL;
 		}
 		free(data);
+		data = NULL;
 	}
 }
 

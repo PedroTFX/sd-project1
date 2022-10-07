@@ -35,6 +35,7 @@ void tree_destroy(struct tree_t *tree){
 			tree_destroy(tree->tree_right);
 		}
 		free(tree);
+		tree = NULL;
 	}
 }
 
@@ -295,8 +296,10 @@ int tree_get_values_aux(struct tree_t *tree, struct data_t **valuePtrs, int inde
 void tree_free_keys(char **keys) {
 	for (int i = 0; keys[i]; i++){
 		free(keys[i]);
+		keys[i] = NULL;
 	}
 	free(keys);
+	keys = NULL;
 }
 
 /* Função que liberta toda a memória alocada por tree_get_values().
