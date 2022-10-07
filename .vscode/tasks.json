@@ -2,9 +2,33 @@
 {
 	"tasks": [
 		{
-			"label": "Compile",
+			"label": "Compile data",
 			"type": "shell",
-			"command": "make test_tree_run",
+			"command": "make test_tree",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "Compile entry",
+			"type": "shell",
+			"command": "make test_entry",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "Compile tree",
+			"type": "shell",
+			"command": "make test_tree",
+			"problemMatcher": [
+				"$gcc"
+			]
+		},
+		{
+			"label": "Compile serial",
+			"type": "shell",
+			"command": "make test_serial",
 			"problemMatcher": [
 				"$gcc"
 			]

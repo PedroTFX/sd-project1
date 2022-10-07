@@ -24,6 +24,7 @@ struct entry_t *entry_create(char *key, struct data_t *data) {
 *  Deve assegurar que destroi o conteúdo antigo da mesma.
 */
 void entry_replace(struct entry_t *entry, char *new_key, struct data_t *new_value){
+	
 	free(entry->key);
     entry->key = new_key;
 
@@ -53,13 +54,14 @@ struct entry_t *entry_dup(struct entry_t *entry) {
 		return NULL;
 	}
 
-	struct entry_t* entry2 = malloc(sizeof(struct entry_t));
+	/*struct entry_t* entry2 = malloc(sizeof(struct entry_t));
 	if (!entry2) { //error init
 		return NULL;
-	}
+	}*/
 
-	entry2->key = strdup(entry->key);
-	entry2->value = data_dup(entry->value);
+	char *key = strdup(entry->key);
+	struct data_t* data = data_dup(entry->value);
+	struct entry_t* entry2 = entry_create(key, data);
 	return entry2;
 }
 
