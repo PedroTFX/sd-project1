@@ -14,11 +14,11 @@
 int testSerialization(){
 	int result = 1;
 	struct tree_t *tree = tree_create();
-/*
+
 	char *keys[5] = {"joaoa", "joaob", "joaoc", "joaod", "joaoe"};
 	char *values[5] = {"santosa", "santosb", "santosc", "santosd", "santose"};
 
- 	struct data_t *data0 = data_create2(strlen(values[0]) + 1, values[0]);
+	struct data_t *data0 = data_create2(strlen(values[0]) + 1, values[0]);
 	struct data_t *data1 = data_create2(strlen(values[1]) + 1, values[1]);
 	struct data_t *data2 = data_create2(strlen(values[2]) + 1, values[2]);
 	struct data_t *data3 = data_create2(strlen(values[3]) + 1, values[3]);
@@ -28,17 +28,7 @@ int testSerialization(){
 	tree_put(tree, keys[1], data1);
 	tree_put(tree, keys[2], data2);
 	tree_put(tree, keys[3], data3);
-	tree_put(tree, keys[4], data4); */
-	char * key;
-    struct data_t* data;
-
-    for(int i = 0; i < 100;i++){
-        key = (char * )malloc(16 * sizeof(char));
-        sprintf(key,"a/key/b-%d",i);
-        data = data_create2(strlen(key)+1,key);
-        tree_put(tree,key,data);
-        data_destroy(data);
-    }
+	tree_put(tree, keys[4], data4);
 
 	char** tree_keys= (char** )tree_get_keys(tree);
 	char* buffer;
@@ -48,19 +38,6 @@ int testSerialization(){
 	for (int i = 0; i < 5; i++) {
 		result = result && (strcmp(tree_keys[i], new_tree_keys[i]) == 0);
 	}
-
-	for (int i = 0; new_tree_keys[i]; i++) {
-		free(new_tree_keys[i]);
-	}
-	for (int i = 0; tree_keys[i]; i++) {
-		free(tree_keys[i]);
-	}
-
-
-	free(buffer);
-	free(tree_keys);
-	free(new_tree_keys);
-	tree_destroy(tree);
 
 	printf("tree - test_Serialization: %s\n", result ? "passou" : "não passou");
 	return result;
