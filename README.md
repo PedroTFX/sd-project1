@@ -1,19 +1,13 @@
 # sd-project1
 
-## Run these commands to compile the tests
-make && gcc -g -Wall tests/test_data.c -o bin/test_data obj/data.o -Iinclude && ./bin/test_data
-make && gcc -g -Wall tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -Iinclude && ./bin/test_entry
-make && gcc -g -Wall tests/test_tree.c -o bin/test_tree obj/tree.o -Iinclude && ./bin/test_tree
+## Tests
 
+Todos os testes passam: `make test_all`
 
+## Memory Leaks
 
-make && gcc -g -Wall tests/test_entry.c -o bin/test_entry obj/data.o obj/entry.o -Iinclude && ./bin/test_entry
+Só sobra um memory leak no tree_del(). Suspeita-se que falte libertar o nó que substitui o apagado (depois de copiado para o nó que é suposto apagar).
 
+## Notas
 
-## TODO
-Data ✅
-Entry ✅
-Tree
-	Get values
-Serialization ✅
-Deserialization✅??
+Não houve alterações na serialização.

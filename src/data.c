@@ -71,19 +71,8 @@ struct data_t *data_dup(struct data_t *data) {
 		return NULL;
 	}
 
-	struct data_t* data_st = malloc(sizeof(struct data_t));
-	if (!data_st) { // error on init
-		return NULL;
-	}
+	struct data_t* data_st = data_create(data->datasize);
 
-	data_st->datasize = data->datasize;
-	data_st->data = malloc(data->datasize);
-
-	// error on init
-	if (!data_st->data) {
-		data_destroy(data_st);
-		return NULL;
-	}
 	memcpy(data_st->data, data->data, data->datasize);
 	return data_st;
 }
@@ -94,6 +83,7 @@ struct data_t *data_dup(struct data_t *data) {
 void data_replace(struct data_t *data, int new_size, void *new_data) {
 	//memset(data, 0, data->datasize);	//clean mem
 	free(data->data);					//reclaim mem
+	//memcpy(data->data, new_data, new_size);
 	data->data = new_data;
 	data->datasize = new_size;
 	
